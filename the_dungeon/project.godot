@@ -8,14 +8,50 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "Node2D",
+"class": "Actor",
+"language": "GDScript",
+"path": "res://src/actors/actor.gd"
+}, {
+"base": "Node2D",
+"class": "ActorController",
+"language": "GDScript",
+"path": "res://src/main/actor_controller.gd"
+}, {
+"base": "Node2D",
+"class": "ActorMover",
+"language": "GDScript",
+"path": "res://src/main/actor_mover.gd"
+}, {
+"base": "Node2D",
+"class": "Map",
+"language": "GDScript",
+"path": "res://src/main/map.gd"
+}, {
+"base": "Actor",
+"class": "PlayerActor",
+"language": "GDScript",
+"path": "res://src/actors/player_actor.gd"
+}, {
+"base": "Node2D",
+"class": "TurnQueue",
+"language": "GDScript",
+"path": "res://src/main/turn_queue.gd"
+} ]
 _global_script_class_icons={
-
+"Actor": "",
+"ActorController": "",
+"ActorMover": "",
+"Map": "",
+"PlayerActor": "",
+"TurnQueue": ""
 }
 
 [application]
 
 config/name="The Dungeon"
+run/main_scene="res://src/main/main.tscn"
 config/icon="res://icon.png"
 
 [rendering]
