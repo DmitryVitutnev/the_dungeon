@@ -4,6 +4,7 @@ class_name ActorController
 
 
 var _map : Map
+var _visibility_map : VisibilityMap
 var _current_delay := 0.0
 
 
@@ -13,8 +14,9 @@ onready var _actor_mover := $ActorMover as ActorMover
 
 
 
-func initialize(map : Map):
+func initialize(map : Map, visibility_map : VisibilityMap):
 	_map = map
+	_visibility_map = visibility_map
 	_actor_mover.connect("finished", self, "_next_turn")
 
 
@@ -26,6 +28,7 @@ func start_game() -> void:
 func add_player(player : PlayerActor) -> void:
 	add_actor(player)
 	_actor_list.set_player(player)
+	
 
 
 func add_actor(actor : Actor) -> void:
@@ -52,7 +55,8 @@ func _actor_move(dir: Vector2, delay : float) -> void:
 		_next_turn()
 
 func _next_turn():
-	print(_current_delay)
 	_turn_queue.next_turn(_current_delay)
 	var actor := _turn_queue.get_current_actor() as Actor
 	actor.start_turn()
+	_visibility_map.call_deferred("update_fog", _actor_list.get_player().pos)
+	#_visibility_map.update_fog(_actor_list.get_player().pos)

@@ -17,9 +17,12 @@ func _input(event):
 		movement = Vector2(0, -1)
 	if event.is_action("ui_down"):
 		movement = Vector2(0, 1)
-	if movement != Vector2.ZERO and _map.is_free(pos + movement):
+	if movement != Vector2.ZERO:
 		_is_my_turn = false
-		emit_signal("move", movement, 1)
+		if _map.is_free(pos + movement):
+			emit_signal("move", movement, 1)
+		else:
+			emit_signal("move", Vector2.ZERO, 1)
 	
 
 
