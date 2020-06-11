@@ -19,10 +19,9 @@ func _input(event):
 		movement = Vector2(0, 1)
 	if movement != Vector2.ZERO and _map.is_free(pos + movement):
 		_is_my_turn = false
-		emit_signal("move", movement)
+		emit_signal("move", movement, 1)
 	
 
 
 func start_turn():
 	_is_my_turn = true
-	print("My turn")

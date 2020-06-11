@@ -13,6 +13,8 @@ var size : Vector2
 
 var _map := []
 var _rooms := []
+var _pathfinding_graph := AStar2D.new()
+var _id_array := []
 
 
 onready var _tile_map := $TileMap as TileMap
@@ -24,6 +26,12 @@ func is_free(pos: Vector2):
 
 func pos_to_coord(pos : Vector2) -> Vector2:
 	return position + pos * TILE_SIZE
+
+
+func find_path(from : Vector2, to : Vector2) -> PoolVector2Array:
+	var id_from = _pathfinding_graph.get_closest_point(from)
+	var id_to = _pathfinding_graph.get_closest_point(to)
+	return _pathfinding_graph.get_point_path(id_from, id_to)
 
 
 func build_level(map_size : Vector2, room_number : int) -> void:
@@ -44,6 +52,8 @@ func build_level(map_size : Vector2, room_number : int) -> void:
 		if free_regions.empty():
 			break;
 	_connect_room()
+	
+	_build_pathfinding_graph()
 
 func _set_tile(x : int, y : int, type : int) -> void:
 	_map[x][y] = type;
@@ -254,3 +264,31 @@ func _pick_random_door_location(room : Rect2) -> Vector2:
 		options.append(Vector2(room.end.x - 1, y))
 	
 	return options[randi() % options.size()]
+
+
+func _build_pathfinding_graph():
+	_id_array.clear()
+	var id := 1
+	for x in range(size.x):
+		_id_array.append([])
+		for y in range(size.y):
+			if is_free(Vector2(x, y)):
+				_id_array[x].append(id)
+				_pathfinding_graph.add_point(id, Vector2(x,y))
+				id += 1
+			else:
+				_id_array[x].append(0)
+	
+	for x in range(1, size.x):
+		for y in range(size.y):
+			var id1 = _id_array[x - 1][y]
+			var id2 = _id_array[x][y]
+			if id1 != 0 and id2 != 0:
+				_pathfinding_graph.connect_points(id1, id2)
+	
+	for x in range(size.x):
+		for y in range(1, size.y):
+			var id1 = _id_array[x][y - 1]
+			var id2 = _id_array[x][y]
+			if id1 != 0 and id2 != 0:
+				_pathfinding_graph.connect_points(id1, id2)

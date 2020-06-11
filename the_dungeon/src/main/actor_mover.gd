@@ -36,5 +36,6 @@ func move_actor(actor : Actor, target : Vector2) -> void:
 	_end_point = target * 32
 	_end_pos = target
 	_t = 0
-	_delta_t = MOVE_SPEED * 32 / (_end_point - _start_point).length()
+	var distance := (_end_point - _start_point).length()
+	_delta_t = MOVE_SPEED * 32 / distance
 	_is_active = true

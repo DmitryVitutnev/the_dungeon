@@ -20,6 +20,11 @@ _global_script_classes=[ {
 "path": "res://src/main/actor_controller.gd"
 }, {
 "base": "Node2D",
+"class": "ActorList",
+"language": "GDScript",
+"path": "res://src/main/actor_list.gd"
+}, {
+"base": "Node2D",
 "class": "ActorMover",
 "language": "GDScript",
 "path": "res://src/main/actor_mover.gd"
@@ -42,6 +47,7 @@ _global_script_classes=[ {
 _global_script_class_icons={
 "Actor": "",
 "ActorController": "",
+"ActorList": "",
 "ActorMover": "",
 "Map": "",
 "PlayerActor": "",

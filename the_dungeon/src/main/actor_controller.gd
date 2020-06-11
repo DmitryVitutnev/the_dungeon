@@ -2,12 +2,12 @@ extends Node2D
 class_name ActorController
 
 
-var _actors := []
-var _current_actor = 0
+
 var _map : Map
+var _current_delay := 0.0
 
 
-onready var _actor_list := $ActorList
+onready var _actor_list := $ActorList as ActorList
 onready var _turn_queue := $TurnQueue as TurnQueue
 onready var _actor_mover := $ActorMover as ActorMover
 
@@ -15,28 +15,44 @@ onready var _actor_mover := $ActorMover as ActorMover
 
 func initialize(map : Map):
 	_map = map
+	_actor_mover.connect("finished", self, "_next_turn")
 
 
 func start_game() -> void:
-	var actor := _actors[_current_actor] as Actor
-	actor.connect("move", self, "_actor_move")
+	var actor := _turn_queue.get_current_actor() as Actor
 	actor.start_turn()
 
 
+func add_player(player : PlayerActor) -> void:
+	add_actor(player)
+	_actor_list.set_player(player)
+
+
 func add_actor(actor : Actor) -> void:
-	actor.initialize(Vector2(15, 15), _map)
-	_actors.push_back(actor)
-	actor.get_parent().remove_child(actor)
-	_actor_list.add_child(actor)
-	#_turn_queue.push_actor_and_time(actor, 0)
+	var pos : Vector2
+	while true:
+		var pos_x := randi() % int(_map.size.x)
+		var pos_y := randi() % int(_map.size.y)
+		pos = Vector2(pos_x, pos_y)
+		if _map.is_free(pos) and !_actor_list.get_actor_by_pos(pos):
+			break
+	
+	actor.initialize(pos, _map, _actor_list)
+	_actor_list.add(actor)
+	_turn_queue.push_actor_and_time(actor, 0)
+	actor.connect("move", self, "_actor_move")
 
 
-func _actor_move(dir: Vector2) -> void:
-	print("_actor_move")
-	var actor := _actors[_current_actor] as Actor
-	_actor_mover.connect("finished", self, "_next_turn")
-	_actor_mover.move_actor(actor, actor.pos + dir)
+func _actor_move(dir: Vector2, delay : float) -> void:
+	_current_delay = delay
+	var actor := _turn_queue.get_current_actor() as Actor
+	if dir.length() > 0.001:
+		_actor_mover.move_actor(actor, actor.pos + dir)
+	else:
+		_next_turn()
 
 func _next_turn():
-	var actor := _actors[_current_actor] as Actor
+	print(_current_delay)
+	_turn_queue.next_turn(_current_delay)
+	var actor := _turn_queue.get_current_actor() as Actor
 	actor.start_turn()

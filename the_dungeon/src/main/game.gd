@@ -17,13 +17,15 @@ var current_level := 0
 onready var map := $Map as Map
 onready var actor_controller := $ActorController as ActorController
 onready var player := $Player as PlayerActor
+onready var enemy := $Enemy as Actor
 
 
 func _ready() -> void:
 	randomize()
 	map.build_level(LEVEL_SIZES[current_level], LEVEL_ROOM_COUNTS[current_level])
 	actor_controller.initialize(map)
-	actor_controller.add_actor(player)
+	actor_controller.add_player(player)
+	actor_controller.add_actor(enemy)
 	actor_controller.start_game()
 
 
