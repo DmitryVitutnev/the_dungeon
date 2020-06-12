@@ -2,10 +2,14 @@ extends Actor
 class_name PlayerActor
 
 
+signal player_health_changed(new_health)
+
+
+var _health := 3
 var _is_my_turn := false
 
 
-func _input(event):
+func _input(event) -> void:
 	if !_is_my_turn:
 		return
 	var movement := Vector2.ZERO
@@ -20,11 +24,20 @@ func _input(event):
 	if movement != Vector2.ZERO:
 		_is_my_turn = false
 		if _map.is_free(pos + movement):
-			emit_signal("move", movement, 1)
+			var actor = _actor_list.get_actor_by_pos(pos + movement)
+			if actor == null:
+				emit_signal("move", movement, 1)
+			else:
+				emit_signal("attack", actor, 1, 1)
 		else:
 			emit_signal("move", Vector2.ZERO, 1)
 	
 
 
-func start_turn():
+func start_turn() -> void:
 	_is_my_turn = true
+
+
+func take_damage(amount : int) -> void:
+	_health -= amount
+	emit_signal("player_health_changed", _health)

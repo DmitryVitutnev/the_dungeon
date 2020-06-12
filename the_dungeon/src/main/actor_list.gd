@@ -3,10 +3,10 @@ class_name ActorList
 
 
 """
-In this script types are not specified because Godot does not support cyclic dependencies
-and this script is meant to be used so that actors will know about each other.
-I hope that this problem will be fixed in the future updates of Godot engine.
-I will specify types in this script then.
+In this script types are not specified because Godot 3.2 does not support cyclic 
+dependencies and this script is meant to be used so that actors will know about 
+each other. I hope that this problem will be fixed in the future updates of Godot 
+engine. I will specify types in this script then.
 """
 
 
@@ -22,6 +22,7 @@ func add(actor) -> void:
 
 func remove(actor) -> void:
 	_actors.erase(actor)
+	actor.queue_free()
 
 
 func get_actor_by_pos(pos : Vector2):
@@ -41,3 +42,9 @@ func set_player(player) -> void:
 
 func get_all() -> Array:
 	return [] + _actors
+
+
+func clear() -> void:
+	for a in _actors:
+		a.queue_free()
+	_actors = []

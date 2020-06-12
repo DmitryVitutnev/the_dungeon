@@ -22,14 +22,23 @@ onready var enemy := $Enemy as Actor
 
 
 func _ready() -> void:
+	_restart_game()
+	player.connect("player_health_changed", self, "_player_health_changed")
+
+
+func _restart_game() -> void:
 	randomize()
+	current_level = 0
 	map.build_level(LEVEL_SIZES[current_level], LEVEL_ROOM_COUNTS[current_level])
 	visibility_map.initialize(LEVEL_SIZES[current_level])
+	
+	# TODO add clear of actors
 	actor_controller.initialize(map, visibility_map)
 	actor_controller.add_player(player)
 	actor_controller.add_actor(enemy)
 	actor_controller.start_game()
-	
-	
 
+
+func _player_health_changed(new_health : int) -> void:
+	pass
 

@@ -2,7 +2,6 @@ extends Node2D
 class_name TurnQueue
 
 
-var _units := []
 var _queue := []
 var _current_time := 0.0
 var _time_passed := 0.0
@@ -33,3 +32,8 @@ func remove_actor(actor : Actor):
 		if _queue[i][0] == actor:
 			_queue.remove(i)
 
+
+func clear() -> void:
+	for a in _queue:
+		a.queue_free()
+	_queue = []
