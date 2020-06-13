@@ -16,7 +16,6 @@ var _actors := []
 
 func add(actor) -> void:
 	_actors.push_back(actor)
-	actor.get_parent().remove_child(actor)
 	add_child(actor)
 
 

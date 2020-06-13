@@ -13,13 +13,13 @@ func _input(event) -> void:
 	if !_is_my_turn:
 		return
 	var movement := Vector2.ZERO
-	if event.is_action("ui_left"):
+	if event.is_action_pressed("ui_left"):
 		movement = Vector2(-1, 0)
-	if event.is_action("ui_right"):
+	if event.is_action_pressed("ui_right"):
 		movement = Vector2(1, 0)
-	if event.is_action("ui_up"):
+	if event.is_action_pressed("ui_up"):
 		movement = Vector2(0, -1)
-	if event.is_action("ui_down"):
+	if event.is_action_pressed("ui_down"):
 		movement = Vector2(0, 1)
 	if movement != Vector2.ZERO:
 		_is_my_turn = false

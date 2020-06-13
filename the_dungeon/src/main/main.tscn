@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://src/main/map.gd" type="Script" id=1]
 [ext_resource path="res://assets/sprites/tiles/exit.png" type="Texture" id=2]
@@ -10,9 +10,7 @@
 [ext_resource path="res://src/main/turn_queue.gd" type="Script" id=8]
 [ext_resource path="res://src/main/actor_controller.gd" type="Script" id=9]
 [ext_resource path="res://src/main/actor_mover.gd" type="Script" id=10]
-[ext_resource path="res://assets/player.tscn" type="PackedScene" id=11]
 [ext_resource path="res://src/main/actor_list.gd" type="Script" id=12]
-[ext_resource path="res://assets/enemy.tscn" type="PackedScene" id=13]
 [ext_resource path="res://assets/sprites/tiles/black.png" type="Texture" id=14]
 [ext_resource path="res://src/main/visibility_map.gd" type="Script" id=15]
 [ext_resource path="res://src/main/ui.gd" type="Script" id=16]
@@ -157,10 +155,6 @@ script = ExtResource( 10 )
 
 [node name="TurnQueue" type="Node2D" parent="ActorController"]
 script = ExtResource( 8 )
-
-[node name="Player" parent="." instance=ExtResource( 11 )]
-
-[node name="Enemy" parent="." instance=ExtResource( 13 )]
 
 [node name="VisibilityMap" type="Node2D" parent="."]
 script = ExtResource( 15 )

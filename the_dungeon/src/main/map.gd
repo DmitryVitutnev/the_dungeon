@@ -34,10 +34,20 @@ func find_path(from : Vector2, to : Vector2) -> PoolVector2Array:
 	return _pathfinding_graph.get_point_path(id_from, id_to)
 
 
+func line_is_free(from : Vector2, to : Vector2) -> bool:
+	var steps_num := max(abs(to.x - from.x), abs(to.y - from.y))
+	for i in range(steps_num):
+		var point = from * (1 - i / steps_num) + to * i / steps_num
+		if !is_free(Vector2(floor(point.x), floor(point.y))):
+			return false
+	return true
+
+
 func build_level(map_size : Vector2, room_number : int) -> void:
 	_rooms.clear()
 	_map.clear()
 	_tile_map.clear()
+	_pathfinding_graph.clear()
 	
 	size = map_size
 	for x in range(size.x):
@@ -54,6 +64,21 @@ func build_level(map_size : Vector2, room_number : int) -> void:
 	_connect_room()
 	
 	_build_pathfinding_graph()
+
+
+func generate_player_pos() -> Vector2:
+	var room = _rooms.front()
+	var x = room.position.x + 1 + randi() % int(room.size.x - 2)
+	var y = room.position.y + 1 + randi() % int(room.size.y - 2)
+	return Vector2(x, y)
+
+
+func generate_enemy_pos() -> Vector2:
+	var room = _rooms[1 + randi() % int(_rooms.size() - 1)]
+	var x = room.position.x + 1 + randi() % int(room.size.x - 2)
+	var y = room.position.y + 1 + randi() % int(room.size.y - 2)
+	return Vector2(x, y)
+
 
 func _set_tile(x : int, y : int, type : int) -> void:
 	_map[x][y] = type;

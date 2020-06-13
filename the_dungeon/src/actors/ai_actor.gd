@@ -1,12 +1,16 @@
 extends Actor
 
 
+var _inactive = true
 var _saw_player := false
 var _last_seen_player_pos : Vector2
 
 
 func start_turn() -> void:
 	_look_for_player()
+	if _inactive:
+		_idle()
+		return
 	if _saw_player:
 		_chase_player()
 	else:
@@ -18,12 +22,14 @@ func take_damage(amount : int) -> void:
 
 
 func _look_for_player() -> void:
+	#var space_state = get_world_2d().direct_space_state
 	var player_pos := _actor_list.get_player().pos as Vector2
-	var player_center := player_pos * 32 + Vector2(16, 16)
-	var my_center := pos * 32 + Vector2(16, 16)
-	var space_state = get_world_2d().direct_space_state
-	var occlusion = space_state.intersect_ray(my_center, player_center)
-	if !occlusion or (occlusion.position - player_center).length() < 1:
+	#var player_center := Vector2(player_pos.x, player_pos.y) * 32 + Vector2(16, 16)
+	#var test_point := Vector2(pos.x, pos.y) * 32 + Vector2(16, 16)
+	#var occlusion = space_state.intersect_ray(player_center, test_point)
+	#if !occlusion or (occlusion.position - test_point).length() < 1:
+	if _map.line_is_free(pos, player_pos):
+		_inactive = false
 		_saw_player = true
 		_last_seen_player_pos = player_pos
 
@@ -61,4 +67,4 @@ func _wander() -> void:
 
 
 func _idle() -> void:
-	emit_signal("idle", 1)
+	emit_signal("idle", 2)

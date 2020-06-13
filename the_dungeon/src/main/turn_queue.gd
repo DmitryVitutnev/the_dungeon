@@ -34,6 +34,4 @@ func remove_actor(actor : Actor):
 
 
 func clear() -> void:
-	for a in _queue:
-		a.queue_free()
 	_queue = []
