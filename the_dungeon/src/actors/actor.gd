@@ -2,6 +2,7 @@ extends Node2D
 class_name Actor
 
 
+signal idle(delay)
 signal move(dir, delay)
 signal attack(target, damage, delay)
 signal death(actor)

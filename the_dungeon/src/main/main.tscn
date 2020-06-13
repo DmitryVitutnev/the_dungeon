@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://src/main/map.gd" type="Script" id=1]
 [ext_resource path="res://assets/sprites/tiles/exit.png" type="Texture" id=2]
@@ -15,6 +15,7 @@
 [ext_resource path="res://assets/enemy.tscn" type="PackedScene" id=13]
 [ext_resource path="res://assets/sprites/tiles/black.png" type="Texture" id=14]
 [ext_resource path="res://src/main/visibility_map.gd" type="Script" id=15]
+[ext_resource path="res://src/main/ui.gd" type="Script" id=16]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
@@ -169,3 +170,36 @@ z_index = 1
 tile_set = SubResource( 5 )
 cell_size = Vector2( 32, 32 )
 format = 1
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="UI" type="ColorRect" parent="CanvasLayer"]
+margin_right = 640.0
+margin_bottom = 32.0
+color = Color( 0.929412, 0.0196078, 0.0196078, 1 )
+script = ExtResource( 16 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Health" type="Label" parent="CanvasLayer/UI"]
+margin_left = 32.0
+margin_right = 160.0
+margin_bottom = 32.0
+text = "Health: ERROR"
+valign = 1
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Level" type="Label" parent="CanvasLayer/UI"]
+margin_left = 160.0
+margin_right = 288.0
+margin_bottom = 32.0
+text = "LEVEL: ERROR"
+valign = 1
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}

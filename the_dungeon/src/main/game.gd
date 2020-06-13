@@ -11,34 +11,38 @@ const LEVEL_SIZES := [
 const LEVEL_ROOM_COUNTS := [5, 7, 9, 12, 15]
 
 
-var current_level := 0
+var _current_level := 0
 
 
-onready var map := $Map as Map
-onready var visibility_map := $VisibilityMap as VisibilityMap
-onready var actor_controller := $ActorController as ActorController
-onready var player := $Player as PlayerActor
-onready var enemy := $Enemy as Actor
+onready var _map := $Map as Map
+onready var _visibility_map := $VisibilityMap as VisibilityMap
+onready var _actor_controller := $ActorController as ActorController
+onready var _player := $Player as PlayerActor
+onready var _enemy := $Enemy as Actor
+onready var _ui := $CanvasLayer/UI as UI
 
 
 func _ready() -> void:
 	_restart_game()
-	player.connect("player_health_changed", self, "_player_health_changed")
+	_player.connect("player_health_changed", self, "_player_health_changed")
 
 
 func _restart_game() -> void:
 	randomize()
-	current_level = 0
-	map.build_level(LEVEL_SIZES[current_level], LEVEL_ROOM_COUNTS[current_level])
-	visibility_map.initialize(LEVEL_SIZES[current_level])
+	_current_level = 0
+	_map.build_level(LEVEL_SIZES[_current_level], LEVEL_ROOM_COUNTS[_current_level])
+	_visibility_map.initialize(LEVEL_SIZES[_current_level])
 	
 	# TODO add clear of actors
-	actor_controller.initialize(map, visibility_map)
-	actor_controller.add_player(player)
-	actor_controller.add_actor(enemy)
-	actor_controller.start_game()
+	_actor_controller.initialize(_map, _visibility_map)
+	_actor_controller.add_player(_player)
+	_actor_controller.add_actor(_enemy)
+	_actor_controller.start_game()
+	
+	_ui.set_health(_player._health)
+	_ui.set_level(_current_level + 1)
 
 
 func _player_health_changed(new_health : int) -> void:
-	pass
+	_ui.set_health(new_health)
 

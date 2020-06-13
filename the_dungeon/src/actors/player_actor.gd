@@ -30,7 +30,7 @@ func _input(event) -> void:
 			else:
 				emit_signal("attack", actor, 1, 1)
 		else:
-			emit_signal("move", Vector2.ZERO, 1)
+			emit_signal("idle", 1)
 	
 
 
@@ -40,4 +40,5 @@ func start_turn() -> void:
 
 func take_damage(amount : int) -> void:
 	_health -= amount
+	print(_health)
 	emit_signal("player_health_changed", _health)

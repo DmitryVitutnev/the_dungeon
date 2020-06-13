@@ -46,22 +46,26 @@ func add_actor(actor : Actor) -> void:
 	actor.initialize(pos, _map, _actor_list)
 	_actor_list.add(actor)
 	_turn_queue.push_actor_and_time(actor, 0)
+	actor.connect("idle", self, "_actor_idle")
 	actor.connect("move", self, "_actor_move")
 	actor.connect("attack", self, "_actor_attack")
 	actor.connect("death", self,"_actor_death")
 
 
+func _actor_idle(delay : float) -> void:
+	_current_delay = delay
+	_next_turn()
+
+
 func _actor_move(dir : Vector2, delay : float) -> void:
 	_current_delay = delay
 	var actor := _turn_queue.get_current_actor() as Actor
-	if dir.length() > 0.001:
-		_actor_mover.move_actor(actor, actor.pos + dir)
-	else:
-		_next_turn()
+	_actor_mover.move_actor(actor, actor.pos + dir)
 
 
 func _actor_attack(target : Actor, damage : int, delay : float) -> void:
 	_current_delay = delay
+	
 	target.take_damage(damage)
 	_next_turn()
 

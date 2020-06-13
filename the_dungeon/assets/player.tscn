@@ -11,4 +11,5 @@ texture = ExtResource( 2 )
 centered = false
 
 [node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 16, 16 )
 current = true
