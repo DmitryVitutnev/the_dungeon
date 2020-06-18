@@ -29,6 +29,21 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/main/actor_mover.gd"
 }, {
+"base": "Panel",
+"class": "EquipmentSlots",
+"language": "GDScript",
+"path": "res://src/inventory/equipment_slots.gd"
+}, {
+"base": "TextureRect",
+"class": "GridBackPack",
+"language": "GDScript",
+"path": "res://src/inventory/grid_back_pack.gd"
+}, {
+"base": "Control",
+"class": "Inventory",
+"language": "GDScript",
+"path": "res://src/inventory/inventory.gd"
+}, {
 "base": "Node2D",
 "class": "Map",
 "language": "GDScript",
@@ -59,6 +74,9 @@ _global_script_class_icons={
 "ActorController": "",
 "ActorList": "",
 "ActorMover": "",
+"EquipmentSlots": "",
+"GridBackPack": "",
+"Inventory": "",
 "Map": "",
 "PlayerActor": "",
 "TurnQueue": "",
@@ -74,13 +92,36 @@ config/icon="res://icon.png"
 
 [autoload]
 
-ItemDB="*res://src/main/item_db.gd"
+ItemDB="*res://src/inventory/item_db.gd"
 
 [display]
 
 window/size/width=640
 window/size/height=360
 window/stretch/mode="viewport"
+
+[importer_defaults]
+
+texture={
+"compress/bptc_ldr": 0,
+"compress/hdr_mode": 0,
+"compress/lossy_quality": 0.7,
+"compress/mode": 0,
+"compress/normal_map": 0,
+"detect_3d": false,
+"flags/anisotropic": false,
+"flags/filter": false,
+"flags/mipmaps": false,
+"flags/repeat": 0,
+"flags/srgb": 2,
+"process/HDR_as_SRGB": false,
+"process/fix_alpha_border": true,
+"process/invert_color": false,
+"process/premult_alpha": false,
+"size_limit": 0,
+"stream": false,
+"svg/scale": 1.0
+}
 
 [input]
 
@@ -117,6 +158,11 @@ interact={
 restart={
 "deadzone": 0.5,
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":82,"unicode":0,"echo":false,"script":null)
+ ]
+}
+inv_grab={
+"deadzone": 0.5,
+"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":1,"pressed":false,"doubleclick":false,"script":null)
  ]
 }
 
