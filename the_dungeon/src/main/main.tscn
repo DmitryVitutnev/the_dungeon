@@ -165,35 +165,114 @@ tile_set = SubResource( 5 )
 cell_size = Vector2( 32, 32 )
 format = 1
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="UI" type="CanvasLayer" parent="."]
+script = ExtResource( 16 )
 
-[node name="UI" type="ColorRect" parent="CanvasLayer"]
+[node name="BlackLine" type="ColorRect" parent="UI"]
 margin_right = 640.0
 margin_bottom = 32.0
-color = Color( 0.929412, 0.0196078, 0.0196078, 1 )
-script = ExtResource( 16 )
+color = Color( 0, 0, 0, 0.384314 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Health" type="Label" parent="CanvasLayer/UI"]
-margin_left = 32.0
-margin_right = 160.0
+[node name="Health" type="Label" parent="UI"]
+margin_right = 128.0
 margin_bottom = 32.0
 text = "Health: ERROR"
+align = 1
 valign = 1
 uppercase = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Level" type="Label" parent="CanvasLayer/UI"]
-margin_left = 160.0
-margin_right = 288.0
+[node name="Level" type="Label" parent="UI"]
+margin_left = 128.0
+margin_right = 224.0
 margin_bottom = 32.0
 text = "LEVEL: ERROR"
+align = 1
 valign = 1
 uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Move" type="Label" parent="UI"]
+margin_left = 224.0
+margin_right = 352.0
+margin_bottom = 32.0
+text = "MOVE - WASD"
+align = 1
+valign = 1
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Ladder" type="Label" parent="UI"]
+margin_left = 352.0
+margin_right = 512.0
+margin_bottom = 32.0
+text = "USE LADDER - ENTER "
+align = 1
+valign = 1
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Ladder2" type="Label" parent="UI"]
+margin_left = 512.0
+margin_right = 640.0
+margin_bottom = 32.0
+text = "Restart - R"
+align = 1
+valign = 1
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="WinScreen" type="ColorRect" parent="UI"]
+visible = false
+margin_right = 640.0
+margin_bottom = 384.0
+color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="UI/WinScreen"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "You Won!
+Congratulations!!!
+Press R to start new game"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DefeatScreen" type="ColorRect" parent="UI"]
+visible = false
+margin_right = 640.0
+margin_bottom = 384.0
+color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="UI/DefeatScreen"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "You Died
+Try to be more carefull next time
+Press R to restart"
+align = 1
+valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }

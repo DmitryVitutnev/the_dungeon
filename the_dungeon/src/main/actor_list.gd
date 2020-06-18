@@ -21,7 +21,7 @@ func add(actor) -> void:
 
 func remove(actor) -> void:
 	_actors.erase(actor)
-	actor.queue_free()
+	remove_child(actor)
 
 
 func get_actor_by_pos(pos : Vector2):
@@ -44,6 +44,4 @@ func get_all() -> Array:
 
 
 func clear() -> void:
-	for a in _actors:
-		a.queue_free()
 	_actors = []

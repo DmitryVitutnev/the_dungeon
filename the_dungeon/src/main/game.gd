@@ -9,7 +9,7 @@ const LEVEL_SIZES := [
 	Vector2(50, 50)
 ]
 const LEVEL_ROOM_COUNTS := [5, 7, 9, 12, 15]
-const LEVEL_ENEMY_COUNTS := [50, 9, 12, 15, 20]
+const LEVEL_ENEMY_COUNTS := [7, 12, 16, 21, 28]
 
 
 var _current_level := 0
@@ -21,10 +21,14 @@ var _player : PlayerActor
 onready var _map := $Map as Map
 onready var _visibility_map := $VisibilityMap as VisibilityMap
 onready var _actor_controller := $ActorController as ActorController
-onready var _ui := $CanvasLayer/UI as UI
+onready var _ui := $UI as UI
+onready var _win_screen = $UI/WinScreen
+onready var _defeat_screen = $UI/DefeatScreen
 
 
 func _ready() -> void:
+	_visibility_map.initialize(_map)
+	_actor_controller.initialize(_map, _visibility_map)
 	_restart_game()
 
 
@@ -34,15 +38,22 @@ func _restart_game() -> void:
 	_player.connect("player_health_changed", self, "_player_health_changed")
 	_current_level = -1
 	_next_level()
+	_win_screen.visible = false
+	_defeat_screen.visible = false
+	
 
 
 func _next_level() -> void:
 	_current_level += 1
+	
+	if _current_level >= LEVEL_SIZES.size():
+		_win()
+		return
+	
 	_map.build_level(LEVEL_SIZES[_current_level], LEVEL_ROOM_COUNTS[_current_level])
-	_visibility_map.initialize(LEVEL_SIZES[_current_level])
+	_visibility_map.reset(LEVEL_SIZES[_current_level])
 	
-	_actor_controller.initialize(_map, _visibility_map)
-	
+	_actor_controller.clear()
 	_actor_controller.add_player(_player)
 	for i in range(LEVEL_ENEMY_COUNTS[_current_level]):
 		_actor_controller.add_enemy(_enemy_scene.instance())
@@ -52,14 +63,23 @@ func _next_level() -> void:
 	_ui.set_level(_current_level + 1)
 	
 
-	
-	
-
-
 func _player_health_changed(new_health : int) -> void:
 	_ui.set_health(new_health)
+	if (new_health <= 0):
+		_defeat()
+
+
+func _win() -> void:
+	_win_screen.visible = true
+
+
+func _defeat() -> void:
+	_defeat_screen.visible = true
 
 
 func _input(event):
-	if event.is_action("ui_accept"):
+	if event.is_action_pressed("interact"):
+		if _player.pos == _map.exit_pos:
+			_next_level()
+	if event.is_action_pressed("restart"):
 		_restart_game()

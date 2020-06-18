@@ -20,9 +20,6 @@ onready var _actor_mover := $ActorMover as ActorMover
 func initialize(map : Map, visibility_map : VisibilityMap) -> void:
 	_map = map
 	_visibility_map = visibility_map
-	_actor_list.clear()
-	_turn_queue.clear()
-
 
 func start_game() -> void:
 	var actor := _turn_queue.get_current_actor() as Actor
@@ -44,6 +41,13 @@ func add_enemy(enemy : Actor) -> void:
 	_add_actor(enemy)
 
 
+func clear() -> void:
+	for actor in _actor_list.get_all():
+		_remove_actor(actor)
+	_actor_list.clear()
+	_turn_queue.clear()
+
+
 func _add_actor(actor : Actor) -> void:
 	_actor_list.add(actor)
 	_turn_queue.push_actor_and_time(actor, 0)
@@ -51,6 +55,15 @@ func _add_actor(actor : Actor) -> void:
 	actor.connect("move", self, "_actor_move")
 	actor.connect("attack", self, "_actor_attack")
 	actor.connect("death", self,"_actor_death")
+
+
+func _remove_actor(actor : Actor) -> void:
+	actor.disconnect("idle", self, "_actor_idle")
+	actor.disconnect("move", self, "_actor_move")
+	actor.disconnect("attack", self, "_actor_attack")
+	actor.disconnect("death", self,"_actor_death")
+	_turn_queue.remove_actor(actor)
+	_actor_list.remove(actor)
 
 
 func _actor_idle(delay : float) -> void:

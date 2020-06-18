@@ -9,6 +9,7 @@ enum Tile {WALL, DOOR, EXIT, FLOOR, STONE}
 
 
 var size : Vector2 
+var exit_pos : Vector2
 
 
 var _map := []
@@ -48,6 +49,7 @@ func build_level(map_size : Vector2, room_number : int) -> void:
 	_map.clear()
 	_tile_map.clear()
 	_pathfinding_graph.clear()
+	_id_array.clear()
 	
 	size = map_size
 	for x in range(size.x):
@@ -62,6 +64,7 @@ func build_level(map_size : Vector2, room_number : int) -> void:
 		if free_regions.empty():
 			break;
 	_connect_room()
+	_place_exit()
 	
 	_build_pathfinding_graph()
 
@@ -289,6 +292,14 @@ func _pick_random_door_location(room : Rect2) -> Vector2:
 		options.append(Vector2(room.end.x - 1, y))
 	
 	return options[randi() % options.size()]
+
+
+func _place_exit() -> void:
+	var room = _rooms.back()
+	var x = room.position.x + 1 + randi() % int(room.size.x - 2)
+	var y = room.position.y + 1 + randi() % int(room.size.y - 2)
+	_set_tile(x, y, Tile.EXIT)
+	exit_pos = Vector2(x, y)
 
 
 func _build_pathfinding_graph():

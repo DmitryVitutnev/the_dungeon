@@ -1,16 +1,12 @@
 extends Actor
 
 
-var _inactive = true
 var _saw_player := false
 var _last_seen_player_pos : Vector2
 
 
 func start_turn() -> void:
 	_look_for_player()
-	if _inactive:
-		_idle()
-		return
 	if _saw_player:
 		_chase_player()
 	else:
@@ -29,14 +25,12 @@ func _look_for_player() -> void:
 	#var occlusion = space_state.intersect_ray(player_center, test_point)
 	#if !occlusion or (occlusion.position - test_point).length() < 1:
 	if _map.line_is_free(pos, player_pos):
-		_inactive = false
 		_saw_player = true
 		_last_seen_player_pos = player_pos
 
 
 func _chase_player() -> void:
 	var path := _map.find_path(pos, _last_seen_player_pos)
-	print(path)
 	if path.size() > 2:
 		if _actor_list.get_actor_by_pos(path[1]) == null:
 			var move_dir := (path[1] - pos) as Vector2
@@ -44,7 +38,6 @@ func _chase_player() -> void:
 		else:
 			emit_signal("idle", 2)
 	elif path.size() == 2:
-		# TODO write code for attack
 		if _actor_list.get_player().pos == path[1]:
 			emit_signal("attack", _actor_list.get_player(), 1, 2)
 			pass
