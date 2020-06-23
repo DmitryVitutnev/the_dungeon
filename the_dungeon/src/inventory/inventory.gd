@@ -5,15 +5,15 @@ class_name Inventory
 const ITEM_BASE := preload("res://src/inventory/item_base.tscn")
 
 
-onready var inv_base := $InventoryBase
-onready var grid_bkpk :=  $GridBackPack as GridBackPack
-onready var eq_slots := $EquipmentSlots as EquipmentSlots
-
-
 var _item_held : Control
 var _item_offset : Vector2
 var _last_container : Control
 var _last_pos : Vector2
+
+
+onready var inv_base := $InventoryBase
+onready var grid_bkpk :=  $GridBackPack as GridBackPack
+onready var eq_slots := $EquipmentSlots as EquipmentSlots
 
 
 func _ready():

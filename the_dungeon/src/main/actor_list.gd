@@ -16,12 +16,10 @@ var _actors := []
 
 func add(actor) -> void:
 	_actors.push_back(actor)
-	add_child(actor)
 
 
 func remove(actor) -> void:
 	_actors.erase(actor)
-	remove_child(actor)
 
 
 func get_actor_by_pos(pos : Vector2):

@@ -11,10 +11,11 @@ var _current_delay := 0.0
 onready var _actor_list := $ActorList as ActorList
 onready var _turn_queue := $TurnQueue as TurnQueue
 onready var _actor_mover := $ActorMover as ActorMover
+onready var _actor_attacker := $ActorAttacker as ActorAttacker
 
 
-#func _ready() -> void:
-	#_actor_mover.connect("finished", self, "_next_turn")
+func _ready():
+	_actor_attacker.connect("finished", self, "_next_turn")
 
 
 func initialize(map : Map, visibility_map : VisibilityMap) -> void:
@@ -28,7 +29,7 @@ func start_game() -> void:
 
 func add_player(player : PlayerActor) -> void:
 	var pos = _map.generate_player_pos()
-	player.initialize(pos, _map, _actor_list)
+	player.set_pos(pos)
 	_add_actor(player)
 	_actor_list.set_player(player)
 
@@ -37,13 +38,14 @@ func add_enemy(enemy : Actor) -> void:
 	var pos = _map.generate_enemy_pos()
 	while _actor_list.get_actor_by_pos(pos) != null:
 		pos = _map.generate_enemy_pos()
-	enemy.initialize(pos, _map, _actor_list)
 	_add_actor(enemy)
+	enemy.initialize(_map, _actor_list)
+	enemy.set_pos(pos)
 
 
 func clear() -> void:
-	for actor in _actor_list.get_all():
-		_remove_actor(actor)
+	for actor in _actor_list.get_children():
+		actor.queue_free()
 	_actor_list.clear()
 	_turn_queue.clear()
 
@@ -64,11 +66,12 @@ func _remove_actor(actor : Actor) -> void:
 	actor.disconnect("death", self,"_actor_death")
 	_turn_queue.remove_actor(actor)
 	_actor_list.remove(actor)
+	actor.get_parent().remove_child(actor)
 
 
 func _actor_idle(delay : float) -> void:
 	_current_delay = delay
-	_next_turn(delay)
+	_next_turn()
 
 
 func _actor_move(dir : Vector2, delay : float) -> void:
@@ -80,13 +83,15 @@ func _actor_move(dir : Vector2, delay : float) -> void:
 	if _actor_list.get_player() == actor:
 		_visibility_map.call_deferred("update_fog", _actor_list.get_player().pos)
 	
-	_next_turn(delay)
+	_next_turn()
 
 
 func _actor_attack(target : Actor, damage : int, delay : float) -> void:
 	_current_delay = delay
 	target.take_damage(damage)
-	_next_turn(delay)
+	var actor := _turn_queue.get_current_actor() as Actor
+	_actor_attacker.attack_actor(actor, target.pos)
+
 
 func _actor_death(actor : Actor) -> void:
 	while(_turn_queue.get_current_actor() == actor):
@@ -95,8 +100,8 @@ func _actor_death(actor : Actor) -> void:
 	_actor_list.remove(actor)
 
 
-func _next_turn(delay : float):
-	_turn_queue.next_turn(delay)
+func _next_turn():
+	_turn_queue.next_turn(_current_delay)
 	var actor := _turn_queue.get_current_actor() as Actor
 	actor.start_turn()
 	

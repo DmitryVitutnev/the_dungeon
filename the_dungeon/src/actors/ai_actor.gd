@@ -5,16 +5,21 @@ var _saw_player := false
 var _last_seen_player_pos : Vector2
 
 
+onready var _health_bar := $HealthBar as HealthBar
+
+
+func initialize(map : Map, actor_list : ActorList) -> void:
+	.initialize(map, actor_list)
+	_health_bar.initialize(stats)
+	stats.connect("health_changed", _health_bar, "_update_bar")
+
+
 func start_turn() -> void:
 	_look_for_player()
 	if _saw_player:
 		_chase_player()
 	else:
 		_wander()
-
-
-func take_damage(amount : int) -> void:
-	emit_signal("death", self)
 
 
 func _look_for_player() -> void:
@@ -34,17 +39,16 @@ func _chase_player() -> void:
 	if path.size() > 2:
 		if _actor_list.get_actor_by_pos(path[1]) == null:
 			var move_dir := (path[1] - pos) as Vector2
-			emit_signal("move", move_dir, 2)
+			emit_signal("move", move_dir, stats.recovery_delay)
 		else:
 			emit_signal("idle", 2)
 	elif path.size() == 2:
 		if _actor_list.get_player().pos == path[1]:
-			emit_signal("attack", _actor_list.get_player(), 1, 2)
-			pass
+			emit_signal("attack", _actor_list.get_player(), stats.damage, stats.recovery_delay)
 		else:
 			var move_dir := (path[1] - pos) as Vector2
 			_saw_player = false
-			emit_signal("move", move_dir, 2)
+			emit_signal("move", move_dir, stats.recovery_delay)
 	else:
 		emit_signal("idle", 2)
 
@@ -56,8 +60,8 @@ func _wander() -> void:
 		if _map.is_free(pos + dir):
 			options.append(dir)
 	var move_dir := options[randi() % options.size()] as Vector2
-	emit_signal("move", move_dir, 2)
+	emit_signal("move", move_dir, stats.recovery_delay)
 
 
 func _idle() -> void:
-	emit_signal("idle", 2)
+	emit_signal("idle", stats.recovery_delay)

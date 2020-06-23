@@ -7,7 +7,7 @@ var _current_time := 0.0
 var _time_passed := 0.0
 
 
-func push_actor_and_time(actor : Actor, delay_time := 0):
+func push_actor_and_time(actor : Actor, delay_time):
 	_queue.push_back([actor, _current_time + delay_time])
 	for i in range(_queue.size() - 1, 1, -1):
 		if _queue[i-1][1] > _queue[i][1]:

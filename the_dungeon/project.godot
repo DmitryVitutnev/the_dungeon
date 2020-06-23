@@ -15,6 +15,11 @@ _global_script_classes=[ {
 "path": "res://src/actors/actor.gd"
 }, {
 "base": "Node2D",
+"class": "ActorAttacker",
+"language": "GDScript",
+"path": "res://src/main/actor_attacker.gd"
+}, {
+"base": "Node2D",
 "class": "ActorController",
 "language": "GDScript",
 "path": "res://src/main/actor_controller.gd"
@@ -29,6 +34,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/main/actor_mover.gd"
 }, {
+"base": "AudioStreamPlayer2D",
+"class": "ActorSound",
+"language": "GDScript",
+"path": "res://src/actors/actor_sound.gd"
+}, {
+"base": "Node2D",
+"class": "ActorStats",
+"language": "GDScript",
+"path": "res://src/actors/actor_stats.gd"
+}, {
 "base": "Panel",
 "class": "EquipmentSlots",
 "language": "GDScript",
@@ -38,6 +53,11 @@ _global_script_classes=[ {
 "class": "GridBackPack",
 "language": "GDScript",
 "path": "res://src/inventory/grid_back_pack.gd"
+}, {
+"base": "Node2D",
+"class": "HealthBar",
+"language": "GDScript",
+"path": "res://src/actors/health_bar.gd"
 }, {
 "base": "Control",
 "class": "Inventory",
@@ -53,6 +73,11 @@ _global_script_classes=[ {
 "class": "PlayerActor",
 "language": "GDScript",
 "path": "res://src/actors/player_actor.gd"
+}, {
+"base": "Resource",
+"class": "StartingStats",
+"language": "GDScript",
+"path": "res://src/actors/starting_stats.gd"
 }, {
 "base": "Node2D",
 "class": "TurnQueue",
@@ -71,14 +96,19 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "Actor": "",
+"ActorAttacker": "",
 "ActorController": "",
 "ActorList": "",
 "ActorMover": "",
+"ActorSound": "",
+"ActorStats": "",
 "EquipmentSlots": "",
 "GridBackPack": "",
+"HealthBar": "",
 "Inventory": "",
 "Map": "",
 "PlayerActor": "",
+"StartingStats": "",
 "TurnQueue": "",
 "UI": "",
 "VisibilityMap": ""
@@ -121,6 +151,10 @@ texture={
 "size_limit": 0,
 "stream": false,
 "svg/scale": 1.0
+}
+ogg_vorbis={
+"loop": false,
+"loop_offset": 0
 }
 
 [input]

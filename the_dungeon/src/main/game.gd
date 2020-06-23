@@ -29,13 +29,16 @@ onready var _defeat_screen = $UI/DefeatScreen
 func _ready() -> void:
 	_visibility_map.initialize(_map)
 	_actor_controller.initialize(_map, _visibility_map)
-	_restart_game()
+	_start_game()
 
 
-func _restart_game() -> void:
+func _start_game() -> void:
 	randomize()
-	_player = _player_scene.instance()
-	_player.connect("player_health_changed", self, "_player_health_changed")
+	_player = _player_scene.instance() as Actor
+	add_child(_player)
+	_player.initialize(_map, _actor_controller._actor_list)
+	_player.stats.connect("health_changed", self, "_player_health_changed")
+	_player.connect("death", self, "_defeat")
 	_current_level = -1
 	_next_level()
 	_win_screen.visible = false
@@ -56,24 +59,25 @@ func _next_level() -> void:
 	_actor_controller.clear()
 	_actor_controller.add_player(_player)
 	for i in range(LEVEL_ENEMY_COUNTS[_current_level]):
-		_actor_controller.add_enemy(_enemy_scene.instance())
+		var enemy = _enemy_scene.instance()
+		add_child(enemy)
+		_actor_controller.add_enemy(enemy)
 	_actor_controller.start_game()
 	
-	_ui.set_health(_player._health)
+	_ui.set_health(_player.stats.health)
 	_ui.set_level(_current_level + 1)
 	
 
 func _player_health_changed(new_health : int) -> void:
 	_ui.set_health(new_health)
-	if (new_health <= 0):
-		_defeat()
 
 
 func _win() -> void:
 	_win_screen.visible = true
 
 
-func _defeat() -> void:
+func _defeat(player : Actor) -> void:
+	_start_game()
 	_defeat_screen.visible = true
 
 
@@ -82,4 +86,5 @@ func _input(event):
 		if _player.pos == _map.exit_pos:
 			_next_level()
 	if event.is_action_pressed("restart"):
-		_restart_game()
+		#_restart_game()
+		get_tree().reload_current_scene()
