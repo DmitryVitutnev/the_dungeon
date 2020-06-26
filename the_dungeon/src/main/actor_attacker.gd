@@ -19,12 +19,10 @@ var _delta_t : float
 
 func _process(delta) -> void:
 	if _active:
-		var wr = weakref(_actor)
-		if !wr.get_ref() or _t + _delta_t * delta >= 1:
+		if _t + _delta_t * delta >= 1:
 			_active = false
-			if wr.get_ref():
-				_actor.position = _start_point
-				emit_signal("finished")
+			_actor.position = _start_point
+			emit_signal("finished")
 		else:
 			_t += _delta_t * delta
 			if _t <= 0.33:
@@ -42,3 +40,7 @@ func attack_actor(actor : Actor, target : Vector2) -> void:
 	_t = 0.0
 	var distance := (_end_point - _start_point).length() as float
 	_delta_t = MOVE_SPEED * 32 / distance
+
+
+func clear() -> void:
+	_active = false

@@ -24,6 +24,7 @@ onready var _actor_controller := $ActorController as ActorController
 onready var _ui := $UI as UI
 onready var _win_screen = $UI/WinScreen
 onready var _defeat_screen = $UI/DefeatScreen
+onready var _inventory = $UI/Inventory
 
 
 func _ready() -> void:
@@ -43,7 +44,7 @@ func _start_game() -> void:
 	_next_level()
 	_win_screen.visible = false
 	_defeat_screen.visible = false
-	
+	_inventory.visible = false
 
 
 func _next_level() -> void:
@@ -55,12 +56,11 @@ func _next_level() -> void:
 	
 	_map.build_level(LEVEL_SIZES[_current_level], LEVEL_ROOM_COUNTS[_current_level])
 	_visibility_map.reset(LEVEL_SIZES[_current_level])
-	
 	_actor_controller.clear()
 	_actor_controller.add_player(_player)
+	
 	for i in range(LEVEL_ENEMY_COUNTS[_current_level]):
 		var enemy = _enemy_scene.instance()
-		add_child(enemy)
 		_actor_controller.add_enemy(enemy)
 	_actor_controller.start_game()
 	
@@ -86,5 +86,6 @@ func _input(event):
 		if _player.pos == _map.exit_pos:
 			_next_level()
 	if event.is_action_pressed("restart"):
-		#_restart_game()
 		get_tree().reload_current_scene()
+	if event.is_action_pressed("inv_open"):
+		_inventory.visible = !_inventory.visible

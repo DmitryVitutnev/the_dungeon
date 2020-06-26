@@ -18,10 +18,8 @@ var _delta_t := []
 
 func _process(delta) -> void:
 	for i in range(_actor.size() - 1, -1, -1):
-		var wr = weakref(_actor[i])
-		if !wr.get_ref() or _t[i] + _delta_t[i] * delta >= 1:
-			if wr.get_ref():
-				_actor[i].position = _end_point[i]
+		if _t[i] + _delta_t[i] * delta >= 1:
+			_actor[i].position = _end_point[i]
 			_actor.remove(i)
 			_start_point.remove(i)
 			_end_point.remove(i)
@@ -39,3 +37,11 @@ func move_actor(actor : Actor, target : Vector2) -> void:
 	_t.append(0.0)
 	var distance := (_end_point.back() - _start_point.back()).length() as float
 	_delta_t.append(MOVE_SPEED * 32 / distance)
+
+
+func clear() -> void:
+	_actor.clear()
+	_start_point.clear()
+	_end_point.clear()
+	_t.clear()
+	_delta_t.clear()

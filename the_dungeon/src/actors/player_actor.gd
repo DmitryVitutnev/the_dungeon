@@ -18,11 +18,12 @@ func _input(event) -> void:
 	if event.is_action_pressed("down"):
 		movement = Vector2(0, 1)
 	if movement != Vector2.ZERO:
+		var target_pos = pos + movement
 		_is_my_turn = false
-		if _map.is_free(pos + movement):
-			var actor = _actor_list.get_actor_by_pos(pos + movement)
+		if _map.is_free(target_pos):
+			var actor = _actor_list.get_actor_by_pos(target_pos)
 			if actor == null:
-				emit_signal("move", movement, stats.recovery_delay)
+				emit_signal("move", target_pos, stats.recovery_delay)
 				#print(stats.recovery_delay)
 			else:
 				emit_signal("attack", actor, stats.damage, stats.recovery_delay)

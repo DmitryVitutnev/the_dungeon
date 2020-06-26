@@ -65,6 +65,21 @@ _global_script_classes=[ {
 "path": "res://src/inventory/inventory.gd"
 }, {
 "base": "Node2D",
+"class": "Item",
+"language": "GDScript",
+"path": "res://src/items/item.gd"
+}, {
+"base": "Resource",
+"class": "ItemModifier",
+"language": "GDScript",
+"path": "res://src/items/item_modifier.gd"
+}, {
+"base": "Resource",
+"class": "ItemStats",
+"language": "GDScript",
+"path": "res://src/items/item_stats.gd"
+}, {
+"base": "Node2D",
 "class": "Map",
 "language": "GDScript",
 "path": "res://src/main/map.gd"
@@ -106,6 +121,9 @@ _global_script_class_icons={
 "GridBackPack": "",
 "HealthBar": "",
 "Inventory": "",
+"Item": "",
+"ItemModifier": "",
+"ItemStats": "",
 "Map": "",
 "PlayerActor": "",
 "StartingStats": "",
@@ -123,6 +141,7 @@ config/icon="res://icon.png"
 [autoload]
 
 ItemDB="*res://src/inventory/item_db.gd"
+Roll="*res://src/utils/roll.gd"
 
 [display]
 
@@ -197,6 +216,11 @@ restart={
 inv_grab={
 "deadzone": 0.5,
 "events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":1,"pressed":false,"doubleclick":false,"script":null)
+ ]
+}
+inv_open={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":73,"unicode":0,"echo":false,"script":null)
  ]
 }
 

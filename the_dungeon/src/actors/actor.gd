@@ -3,8 +3,8 @@ class_name Actor
 
 
 signal idle(delay)
-signal move(dir, delay)
-signal attack(target, damage, delay)
+signal move(target_pos, delay)
+signal attack(target_actor, damage, delay)
 signal health_changed(new_health)
 signal death(actor)
 

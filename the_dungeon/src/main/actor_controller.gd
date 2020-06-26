@@ -30,28 +30,30 @@ func start_game() -> void:
 func add_player(player : PlayerActor) -> void:
 	var pos = _map.generate_player_pos()
 	player.set_pos(pos)
-	_add_actor(player)
 	_actor_list.set_player(player)
+	
+	_add_actor(player)
 
 
 func add_enemy(enemy : Actor) -> void:
 	var pos = _map.generate_enemy_pos()
 	while _actor_list.get_actor_by_pos(pos) != null:
 		pos = _map.generate_enemy_pos()
-	_add_actor(enemy)
+	_actor_list.add_enemy(enemy)
 	enemy.initialize(_map, _actor_list)
 	enemy.set_pos(pos)
+	
+	_add_actor(enemy)
 
 
 func clear() -> void:
-	for actor in _actor_list.get_children():
-		actor.queue_free()
-	_actor_list.clear()
 	_turn_queue.clear()
+	_actor_list.clear_enemies()
+	_actor_mover.clear()
+	_actor_attacker.clear()
 
 
 func _add_actor(actor : Actor) -> void:
-	_actor_list.add(actor)
 	_turn_queue.push_actor_and_time(actor, 0)
 	actor.connect("idle", self, "_actor_idle")
 	actor.connect("move", self, "_actor_move")
@@ -74,11 +76,11 @@ func _actor_idle(delay : float) -> void:
 	_next_turn()
 
 
-func _actor_move(dir : Vector2, delay : float) -> void:
+func _actor_move(target_pos : Vector2, delay : float) -> void:
 	_current_delay = delay
 	var actor := _turn_queue.get_current_actor() as Actor
-	_actor_mover.move_actor(actor, actor.pos + dir)
-	actor.pos += dir
+	_actor_mover.move_actor(actor, target_pos)
+	actor.pos = target_pos
 	
 	if _actor_list.get_player() == actor:
 		_visibility_map.call_deferred("update_fog", _actor_list.get_player().pos)
@@ -86,18 +88,18 @@ func _actor_move(dir : Vector2, delay : float) -> void:
 	_next_turn()
 
 
-func _actor_attack(target : Actor, damage : int, delay : float) -> void:
+func _actor_attack(target_actor : Actor, damage : int, delay : float) -> void:
 	_current_delay = delay
-	target.take_damage(damage)
+	target_actor.take_damage(damage)
 	var actor := _turn_queue.get_current_actor() as Actor
-	_actor_attacker.attack_actor(actor, target.pos)
+	_actor_attacker.attack_actor(actor, target_actor.pos)
 
 
 func _actor_death(actor : Actor) -> void:
 	while(_turn_queue.get_current_actor() == actor):
 		_turn_queue.next_turn(1000)
 	_turn_queue.remove_actor(actor)
-	_actor_list.remove(actor)
+	_actor_list.remove_enemy(actor)
 
 
 func _next_turn():

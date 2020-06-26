@@ -39,7 +39,7 @@ func _chase_player() -> void:
 	if path.size() > 2:
 		if _actor_list.get_actor_by_pos(path[1]) == null:
 			var move_dir := (path[1] - pos) as Vector2
-			emit_signal("move", move_dir, stats.recovery_delay)
+			emit_signal("move", pos + move_dir, stats.recovery_delay)
 		else:
 			emit_signal("idle", 2)
 	elif path.size() == 2:
@@ -48,7 +48,7 @@ func _chase_player() -> void:
 		else:
 			var move_dir := (path[1] - pos) as Vector2
 			_saw_player = false
-			emit_signal("move", move_dir, stats.recovery_delay)
+			emit_signal("move", pos + move_dir, stats.recovery_delay)
 	else:
 		emit_signal("idle", 2)
 
@@ -60,7 +60,7 @@ func _wander() -> void:
 		if _map.is_free(pos + dir):
 			options.append(dir)
 	var move_dir := options[randi() % options.size()] as Vector2
-	emit_signal("move", move_dir, stats.recovery_delay)
+	emit_signal("move", pos + move_dir, stats.recovery_delay)
 
 
 func _idle() -> void:

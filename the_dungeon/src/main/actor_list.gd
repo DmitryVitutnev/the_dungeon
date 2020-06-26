@@ -11,21 +11,25 @@ engine. I will specify types in this script then.
 
 
 var _player # : PlayerActor
-var _actors := []
+var _enemies := []
 
 
-func add(actor) -> void:
-	_actors.push_back(actor)
+func add_enemy(enemy) -> void:
+	_enemies.push_back(enemy)
+	add_child(enemy)
 
 
-func remove(actor) -> void:
-	_actors.erase(actor)
+func remove_enemy(enemy) -> void:
+	_enemies.erase(enemy)
+	remove_child(enemy)
 
 
 func get_actor_by_pos(pos : Vector2):
-	for i in range(_actors.size()):
-		if _actors[i].pos == pos:
-			return _actors[i]
+	if _player.pos == pos:
+		return _player
+	for i in range(_enemies.size()):
+		if _enemies[i].pos == pos:
+			return _enemies[i]
 	return null
 
 
@@ -38,8 +42,10 @@ func set_player(player) -> void:
 
 
 func get_all() -> Array:
-	return [] + _actors
+	return [_player] + _enemies
 
 
-func clear() -> void:
-	_actors = []
+func clear_enemies() -> void:
+	var enemies_to_remove := [] + _enemies
+	for enemy in enemies_to_remove:
+		remove_enemy(enemy)

@@ -16,15 +16,9 @@ onready var grid_bkpk :=  $GridBackPack as GridBackPack
 onready var eq_slots := $EquipmentSlots as EquipmentSlots
 
 
-func _ready():
-	pickup_item("sword")
-	pickup_item("sword")
-	pickup_item("sword")
-	pickup_item("axe")
-	pickup_item("hello")
-
-
 func _process(delta) -> void:
+	if !visible:
+		return
 	var cursor_pos := get_global_mouse_position()
 	if Input.is_action_just_pressed("inv_grab"):
 		_grab(cursor_pos)
