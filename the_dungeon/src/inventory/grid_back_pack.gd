@@ -4,9 +4,11 @@ class_name GridBackPack
 
 var _items := []
 var _grid := []
-var _cell_size := 32
+var _cell_size := 16
 var _grid_width := 0
 var _grid_height := 0
+
+onready var _item_info := get_parent().get_parent().get_node("ItemInfo") as ItemInfo
 
 
 func _ready() -> void:
@@ -18,9 +20,22 @@ func _ready() -> void:
 		_grid.append([])
 		for y in range(_grid_height):
 			_grid[x].append(false)
+	
+	_item_info.visible = false
 
 
-func insert_item(item):
+func _process(delta) -> void:
+	var cursor_pos := get_global_mouse_position()
+	var item = _get_item_under_pos(cursor_pos) as ItemInInventory
+	if item != null:
+		_item_info.update_item(item.item_info)
+		_item_info.set_global_position(cursor_pos)
+		_item_info.visible = true
+	else:
+		_item_info.visible = false
+
+
+func insert_item(item : ItemInInventory):
 	var item_pos = item.rect_global_position + Vector2(_cell_size / 2, _cell_size / 2)
 	var g_pos = _pos_to_grid_coord(item_pos)
 	var item_size = _get_grid_size(item)
@@ -47,7 +62,7 @@ func grab_item(pos : Vector2):
 	return item
 
 
-func insert_item_at_first_available_slot(item):
+func insert_item_at_first_available_slot(item : ItemInInventory):
 	for x in range(_grid_width):
 		for y in range(_grid_height):
 			if !_grid[x][y]:

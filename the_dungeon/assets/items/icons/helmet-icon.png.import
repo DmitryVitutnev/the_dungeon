@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/dagger.png-e89eb5a3190290fe03d28e15e269e8ee.stex"
+path="res://.import/helmet-icon.png-eabf5c3e182e639343848e648c4e18e6.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/items/icons/dagger.png"
-dest_files=[ "res://.import/dagger.png-e89eb5a3190290fe03d28e15e269e8ee.stex" ]
+source_file="res://assets/items/icons/helmet-icon.png"
+dest_files=[ "res://.import/helmet-icon.png-eabf5c3e182e639343848e648c4e18e6.stex" ]
 
 [params]
 
@@ -30,5 +30,5 @@ process/HDR_as_SRGB=false
 process/invert_color=false
 stream=false
 size_limit=0
-detect_3d=true
+detect_3d=false
 svg/scale=1.0

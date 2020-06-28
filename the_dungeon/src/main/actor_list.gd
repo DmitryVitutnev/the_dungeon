@@ -10,7 +10,7 @@ engine. I will specify types in this script then.
 """
 
 
-var _player # : PlayerActor
+var player # : PlayerActor
 var _enemies := []
 
 
@@ -24,25 +24,27 @@ func remove_enemy(enemy) -> void:
 	remove_child(enemy)
 
 
-func get_actor_by_pos(pos : Vector2):
-	if _player.pos == pos:
-		return _player
+func get_alive_actor_by_pos(pos : Vector2):
+	if player.pos == pos:
+		return player
 	for i in range(_enemies.size()):
-		if _enemies[i].pos == pos:
+		if _enemies[i].pos == pos and _enemies[i].dead == false:
 			return _enemies[i]
 	return null
 
 
-func get_player():
-	return _player
-
-
-func set_player(player) -> void:
-	_player = player
+func get_all_actors_by_pos(pos : Vector2):
+	var result := []
+	if player.pos == pos:
+		result.append(player)
+	for i in range(_enemies.size()):
+		if _enemies[i].pos == pos:
+			result.append(_enemies[i])
+	return result
 
 
 func get_all() -> Array:
-	return [_player] + _enemies
+	return [player] + _enemies
 
 
 func clear_enemies() -> void:

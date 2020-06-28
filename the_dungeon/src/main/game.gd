@@ -40,6 +40,10 @@ func _start_game() -> void:
 	_player.initialize(_map, _actor_controller._actor_list)
 	_player.stats.connect("health_changed", self, "_player_health_changed")
 	_player.connect("death", self, "_defeat")
+	
+	_inventory.connect("item_equipped", _player, "equip_item")
+	_inventory.connect("item_unequipped", _player, "unequip_item")
+	
 	_current_level = -1
 	_next_level()
 	_win_screen.visible = false
@@ -53,6 +57,11 @@ func _next_level() -> void:
 	if _current_level >= LEVEL_SIZES.size():
 		_win()
 		return
+	
+	# Temporal solution. So player will have some items each level
+	for i in range(2):
+		var item = ItemDB.generate_item()
+		_inventory.pickup_item(item)
 	
 	_map.build_level(LEVEL_SIZES[_current_level], LEVEL_ROOM_COUNTS[_current_level])
 	_visibility_map.reset(LEVEL_SIZES[_current_level])

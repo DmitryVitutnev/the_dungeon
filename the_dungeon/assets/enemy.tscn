@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://assets/sprites/characters/char32.png" type="Texture" id=1]
+[ext_resource path="res://src/actors/appearance.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/actors/ai_actor.gd" type="Script" id=2]
 [ext_resource path="res://src/actors/actor_stats.gd" type="Script" id=3]
 [ext_resource path="res://assets/actors/stats/basic_enemy_stats.tres" type="Resource" id=4]
@@ -10,10 +10,6 @@
 [node name="Enemy" type="Node2D"]
 script = ExtResource( 2 )
 starting_stats = ExtResource( 4 )
-
-[node name="Sprite" type="Sprite" parent="."]
-texture = ExtResource( 1 )
-centered = false
 
 [node name="Stats" type="Node2D" parent="."]
 script = ExtResource( 3 )
@@ -39,3 +35,6 @@ __meta__ = {
 
 [node name="Sound" type="AudioStreamPlayer2D" parent="."]
 script = ExtResource( 6 )
+
+[node name="Appearance" parent="." instance=ExtResource( 1 )]
+position = Vector2( 16, 16 )

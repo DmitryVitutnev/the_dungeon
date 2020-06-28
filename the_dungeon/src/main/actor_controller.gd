@@ -29,19 +29,19 @@ func start_game() -> void:
 
 func add_player(player : PlayerActor) -> void:
 	var pos = _map.generate_player_pos()
-	player.set_pos(pos)
-	_actor_list.set_player(player)
+	player.pos = pos
+	_actor_list.player = player
 	
 	_add_actor(player)
 
 
 func add_enemy(enemy : Actor) -> void:
 	var pos = _map.generate_enemy_pos()
-	while _actor_list.get_actor_by_pos(pos) != null:
+	while _actor_list.get_alive_actor_by_pos(pos) != null:
 		pos = _map.generate_enemy_pos()
 	_actor_list.add_enemy(enemy)
 	enemy.initialize(_map, _actor_list)
-	enemy.set_pos(pos)
+	enemy.pos = pos
 	
 	_add_actor(enemy)
 
@@ -82,8 +82,8 @@ func _actor_move(target_pos : Vector2, delay : float) -> void:
 	_actor_mover.move_actor(actor, target_pos)
 	actor.pos = target_pos
 	
-	if _actor_list.get_player() == actor:
-		_visibility_map.call_deferred("update_fog", _actor_list.get_player().pos)
+	if _actor_list.player == actor:
+		_visibility_map.call_deferred("update_fog", _actor_list.player.pos)
 	
 	_next_turn()
 
@@ -96,10 +96,10 @@ func _actor_attack(target_actor : Actor, damage : int, delay : float) -> void:
 
 
 func _actor_death(actor : Actor) -> void:
-	while(_turn_queue.get_current_actor() == actor):
-		_turn_queue.next_turn(1000)
-	_turn_queue.remove_actor(actor)
-	_actor_list.remove_enemy(actor)
+	pass
+	#_current_delay = 1000
+	#_turn_queue.remove_actor(actor)
+	#_actor_list.remove(actor)
 
 
 func _next_turn():

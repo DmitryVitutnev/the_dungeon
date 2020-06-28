@@ -2,21 +2,26 @@ extends Control
 class_name Inventory
 
 
+signal item_equipped(item)
+signal item_unequipped(item)
+
+
 const ITEM_BASE := preload("res://src/inventory/item_base.tscn")
 
 
-var _item_held : Control
+var _item_held : ItemInInventory
 var _item_offset : Vector2
 var _last_container : Control
 var _last_pos : Vector2
 
 
-onready var inv_base := $InventoryBase
-onready var grid_bkpk :=  $GridBackPack as GridBackPack
-onready var eq_slots := $EquipmentSlots as EquipmentSlots
+onready var inv_base := $Main/InventoryBase
+onready var grid_bkpk :=  $Main/GridBackPack as GridBackPack
+onready var eq_slots := $Main/EquipmentSlots as EquipmentSlots
+onready var items := $Items as Control
 
 
-func _process(delta) -> void:
+func _process(delta) -> void:	
 	if !visible:
 		return
 	var cursor_pos := get_global_mouse_position()
@@ -26,16 +31,19 @@ func _process(delta) -> void:
 		_release(cursor_pos)
 	if _item_held != null:
 		_item_held.rect_global_position = cursor_pos + _item_offset
+		
 
 
-func pickup_item(item_id):
+func pickup_item(item_info : Item):
 	var item = ITEM_BASE.instance()
-	item.set_meta("id", item_id)
-	item.texture = load(ItemDB.get_item(item_id)["icon"])
-	add_child(item)
+	item.item_info = item_info
+	item.texture = item_info.icon
+	items.add_child(item)
 	if !grid_bkpk.insert_item_at_first_available_slot(item):
+		# Code for not picking up when inventory is full
 		item.queue_free()
 		return false
+	# Code for picking up
 	return true
 
 
@@ -58,6 +66,10 @@ func _release(cursor_pos) -> void:
 		_drop_item()
 	elif c.has_method("insert_item"):
 		if c.insert_item(_item_held):
+			if _last_container == eq_slots:
+				emit_signal("item_unequipped", _item_held.item_info)
+			if c == eq_slots:
+				emit_signal("item_equipped", _item_held.item_info)
 			_item_held = null
 		else:
 			_return_item()

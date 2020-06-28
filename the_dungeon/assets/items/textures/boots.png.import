@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/error.png-d5e34a0bf03217bb1cff486568b0e20a.stex"
+path="res://.import/boots.png-02a352ef4d90f33e5a65d3c3d7ee6029.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/items/icons/error.png"
-dest_files=[ "res://.import/error.png-d5e34a0bf03217bb1cff486568b0e20a.stex" ]
+source_file="res://assets/items/textures/boots.png"
+dest_files=[ "res://.import/boots.png-02a352ef4d90f33e5a65d3c3d7ee6029.stex" ]
 
 [params]
 

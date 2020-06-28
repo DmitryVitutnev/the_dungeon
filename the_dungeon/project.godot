@@ -15,6 +15,11 @@ _global_script_classes=[ {
 "path": "res://src/actors/actor.gd"
 }, {
 "base": "Node2D",
+"class": "ActorAppearance",
+"language": "GDScript",
+"path": "res://src/actors/actor_appearance.gd"
+}, {
+"base": "Node2D",
 "class": "ActorAttacker",
 "language": "GDScript",
 "path": "res://src/main/actor_attacker.gd"
@@ -69,6 +74,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/items/item.gd"
 }, {
+"base": "TextureRect",
+"class": "ItemInInventory",
+"language": "GDScript",
+"path": "res://src/inventory/item_base.gd"
+}, {
+"base": "Panel",
+"class": "ItemInfo",
+"language": "GDScript",
+"path": "res://src/inventory/item_info.gd"
+}, {
 "base": "Resource",
 "class": "ItemModifier",
 "language": "GDScript",
@@ -111,6 +126,7 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "Actor": "",
+"ActorAppearance": "",
 "ActorAttacker": "",
 "ActorController": "",
 "ActorList": "",
@@ -122,6 +138,8 @@ _global_script_class_icons={
 "HealthBar": "",
 "Inventory": "",
 "Item": "",
+"ItemInInventory": "",
+"ItemInfo": "",
 "ItemModifier": "",
 "ItemStats": "",
 "Map": "",
@@ -140,14 +158,14 @@ config/icon="res://icon.png"
 
 [autoload]
 
-ItemDB="*res://src/inventory/item_db.gd"
+ItemDB="*res://src/items/item_db.gd"
 Roll="*res://src/utils/roll.gd"
 
 [display]
 
 window/size/width=640
 window/size/height=360
-window/stretch/mode="viewport"
+window/stretch/mode="2d"
 
 [importer_defaults]
 

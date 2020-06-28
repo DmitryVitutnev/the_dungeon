@@ -1,18 +1,14 @@
 [gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://src/actors/player_actor.gd" type="Script" id=1]
-[ext_resource path="res://assets/sprites/characters/char32.png" type="Texture" id=2]
 [ext_resource path="res://src/actors/actor_stats.gd" type="Script" id=3]
 [ext_resource path="res://assets/actors/stats/player_stats.tres" type="Resource" id=4]
 [ext_resource path="res://src/actors/actor_sound.gd" type="Script" id=5]
+[ext_resource path="res://src/actors/appearance.tscn" type="PackedScene" id=6]
 
 [node name="Player" type="Node2D"]
 script = ExtResource( 1 )
 starting_stats = ExtResource( 4 )
-
-[node name="Sprite" type="Sprite" parent="."]
-texture = ExtResource( 2 )
-centered = false
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2( 16, 16 )
@@ -23,3 +19,6 @@ script = ExtResource( 3 )
 
 [node name="Sound" type="AudioStreamPlayer2D" parent="."]
 script = ExtResource( 5 )
+
+[node name="Appearance" parent="." instance=ExtResource( 6 )]
+position = Vector2( 16, 16 )
