@@ -10,12 +10,12 @@ onready var _health_bar := $HealthBar as HealthBar
 
 func initialize(map : Map, actor_list : ActorList) -> void:
 	.initialize(map, actor_list)
-	_health_bar.initialize(stats)
-	stats.connect("health_changed", _health_bar, "_update_bar")
+	_health_bar.initialize(self)
+	connect("stats_changed", _health_bar, "_update_bar")
 
 
 func start_turn() -> void:
-	if dead:
+	if _is_dead():
 		_idle()
 		return
 	_look_for_player()
@@ -42,29 +42,28 @@ func _chase_player() -> void:
 	if path.size() > 2:
 		if _actor_list.get_alive_actor_by_pos(path[1]) == null:
 			var move_dir := (path[1] - pos) as Vector2
-			emit_signal("move", pos + move_dir, stats.recovery_delay)
+			emit_signal("action_move", pos + move_dir, 1.0/_get_speed())
 		else:
-			emit_signal("idle", 2)
+			emit_signal("action_idle", 2)
 	elif path.size() == 2:
 		if _actor_list.player.pos == path[1]:
-			emit_signal("attack", _actor_list.player, stats.damage, stats.recovery_delay)
+			emit_signal("action_attack", _actor_list.player, _get_damage(), 1.0/_get_speed())
 		else:
 			var move_dir := (path[1] - pos) as Vector2
 			_saw_player = false
-			emit_signal("move", pos + move_dir, stats.recovery_delay)
+			emit_signal("action_move", pos + move_dir, 1.0/_get_speed())
 	else:
-		emit_signal("idle", 2)
+		emit_signal("action_idle", 2)
 
 
 func _wander() -> void:
-	# TODO Think how enemies should wander when player can't see them
 	var options := []
 	for dir in [Vector2(0, 1), Vector2(0, -1), Vector2(1, 0), Vector2(-1, 0)]:
 		if _map.is_free(pos + dir):
 			options.append(dir)
 	var move_dir := options[randi() % options.size()] as Vector2
-	emit_signal("move", pos + move_dir, stats.recovery_delay)
+	emit_signal("action_move", pos + move_dir, 1.0/_get_speed())
 
 
 func _idle() -> void:
-	emit_signal("idle", stats.recovery_delay)
+	emit_signal("action_idle", 1.0/_get_speed())

@@ -38,7 +38,7 @@ func _start_game() -> void:
 	_player = _player_scene.instance() as Actor
 	add_child(_player)
 	_player.initialize(_map, _actor_controller._actor_list)
-	_player.stats.connect("health_changed", self, "_player_health_changed")
+	_player.connect("stats_changed", self, "_player_health_changed")
 	_player.connect("death", self, "_defeat")
 	
 	_inventory.connect("item_equipped", _player, "equip_item")
@@ -73,12 +73,12 @@ func _next_level() -> void:
 		_actor_controller.add_enemy(enemy)
 	_actor_controller.start_game()
 	
-	_ui.set_health(_player.stats.health)
+	_ui.set_health(_player.health)
 	_ui.set_level(_current_level + 1)
 	
 
-func _player_health_changed(new_health : int) -> void:
-	_ui.set_health(new_health)
+func _player_health_changed() -> void:
+	_ui.set_health(_player.health)
 
 
 func _win() -> void:

@@ -58,5 +58,5 @@ func d100(number : int) -> int:
 func dx(number : int, x : int) -> int:
 	var result := 0
 	for i in range(number):
-		result += randi() % x
+		result += 1 + randi() % x
 	return result

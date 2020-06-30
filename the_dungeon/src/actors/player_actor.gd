@@ -23,11 +23,11 @@ func _input(event) -> void:
 		if _map.is_free(target_pos):
 			var actor = _actor_list.get_alive_actor_by_pos(target_pos)
 			if actor == null:
-				emit_signal("move", target_pos, stats.recovery_delay)
+				emit_signal("action_move", target_pos, 1.0/_get_speed())
 			else:
-				emit_signal("attack", actor, stats.damage, stats.recovery_delay)
+				emit_signal("action_attack", actor, _get_damage(), 1.0/_get_speed())
 		else:
-			emit_signal("idle", stats.recovery_delay)
+			emit_signal("action_idle", 1.0/_get_speed())
 	
 
 
@@ -41,9 +41,9 @@ func pickup_item(item : Item) -> void:
 
 func equip_item(item : Item) -> void:
 	_equipped_items[item.slot] = item
-	appearance.set_texture(item.texture, item.slot)
+	_appearance.set_texture(item.texture, item.slot)
 
 
 func unequip_item(item : Item) -> void:
 	_equipped_items[item.slot] = null
-	appearance.free_slot(item.slot)
+	_appearance.free_slot(item.slot)

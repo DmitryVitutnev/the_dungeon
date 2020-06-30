@@ -55,16 +55,17 @@ func clear() -> void:
 
 func _add_actor(actor : Actor) -> void:
 	_turn_queue.push_actor_and_time(actor, 0)
-	actor.connect("idle", self, "_actor_idle")
-	actor.connect("move", self, "_actor_move")
-	actor.connect("attack", self, "_actor_attack")
+	actor.connect("action_idle", self, "_actor_idle")
+	actor.connect("action_move", self, "_actor_move")
+	actor.connect("action_attack", self, "_actor_attack")
+	
 	actor.connect("death", self,"_actor_death")
 
 
 func _remove_actor(actor : Actor) -> void:
-	actor.disconnect("idle", self, "_actor_idle")
-	actor.disconnect("move", self, "_actor_move")
-	actor.disconnect("attack", self, "_actor_attack")
+	actor.disconnect("action_idle", self, "_actor_idle")
+	actor.disconnect("action_move", self, "_actor_move")
+	actor.disconnect("action_attack", self, "_actor_attack")
 	actor.disconnect("death", self,"_actor_death")
 	_turn_queue.remove_actor(actor)
 	_actor_list.remove(actor)
@@ -88,9 +89,9 @@ func _actor_move(target_pos : Vector2, delay : float) -> void:
 	_next_turn()
 
 
-func _actor_attack(target_actor : Actor, damage : int, delay : float) -> void:
+func _actor_attack(target_actor : Actor, damage : String, delay : float) -> void:
 	_current_delay = delay
-	target_actor.take_damage(damage)
+	target_actor.take_damage(max(0, Roll.from_string(damage) - target_actor.armor))
 	var actor := _turn_queue.get_current_actor() as Actor
 	_actor_attacker.attack_actor(actor, target_actor.pos)
 

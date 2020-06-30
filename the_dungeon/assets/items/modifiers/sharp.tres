@@ -9,3 +9,4 @@ postfix_name = "of sharpness"
 value = 1
 damage = "1"
 armor = 0
+max_health = 0
