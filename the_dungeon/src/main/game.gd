@@ -69,8 +69,10 @@ func _next_level() -> void:
 	_actor_controller.add_player(_player)
 	
 	for i in range(LEVEL_ENEMY_COUNTS[_current_level]):
-		var enemy = _enemy_scene.instance()
+		var enemy := _enemy_scene.instance() as Actor
 		_actor_controller.add_enemy(enemy)
+		for j in range(_current_level + 1):
+			enemy.equip_item(ItemDB.generate_item())
 	_actor_controller.start_game()
 	
 	_ui.set_health(_player.health)

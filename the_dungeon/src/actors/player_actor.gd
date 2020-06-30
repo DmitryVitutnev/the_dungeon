@@ -33,17 +33,3 @@ func _input(event) -> void:
 
 func start_turn() -> void:
 	_is_my_turn = true
-
-
-func pickup_item(item : Item) -> void:
-	_items.append(item)
-
-
-func equip_item(item : Item) -> void:
-	_equipped_items[item.slot] = item
-	_appearance.set_texture(item.texture, item.slot)
-
-
-func unequip_item(item : Item) -> void:
-	_equipped_items[item.slot] = null
-	_appearance.free_slot(item.slot)

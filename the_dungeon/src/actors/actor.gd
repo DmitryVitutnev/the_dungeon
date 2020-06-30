@@ -62,9 +62,8 @@ func equip_item(item : Item) -> void:
 
 
 func unequip_item(item : Item) -> void:
-	if _equipped_items[item.slot] == item:
-		_equipped_items.erase[item.slot] = null
-		_appearance.free_slot(item.slot)
+	_equipped_items[item.slot] = null
+	_appearance.free_slot(item.slot)
 
 
 func _die() -> void:
