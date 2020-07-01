@@ -91,9 +91,9 @@ __meta__ = {
 
 [node name="GridBackPack" type="TextureRect" parent="Main"]
 margin_left = -256.0
-margin_top = -84.0
+margin_top = -52.0
 margin_right = -32.0
-margin_bottom = 76.0
+margin_bottom = 108.0
 texture = ExtResource( 1 )
 script = ExtResource( 4 )
 __meta__ = {
@@ -110,3 +110,15 @@ __meta__ = {
 [node name="ItemInfo" parent="." instance=ExtResource( 5 )]
 
 [node name="ItemInfo2" parent="." instance=ExtResource( 5 )]
+
+[node name="Label" type="Label" parent="."]
+margin_left = -272.0
+margin_top = -132.0
+margin_right = 20.0
+margin_bottom = -84.0
+text = "Hold Left Mouse Button to grab item
+Release above proper slot to equip item
+Move item out of inventory window to drop it"
+__meta__ = {
+"_edit_use_anchors_": false
+}

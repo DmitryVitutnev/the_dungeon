@@ -19,15 +19,13 @@ func _input(event) -> void:
 		movement = Vector2(0, 1)
 	if movement != Vector2.ZERO:
 		var target_pos = pos + movement
-		_is_my_turn = false
 		if _map.is_free(target_pos):
+			_is_my_turn = false
 			var actor = _actor_list.get_alive_actor_by_pos(target_pos)
 			if actor == null:
 				emit_signal("action_move", target_pos, 1.0/_get_speed())
 			else:
 				emit_signal("action_attack", actor, _get_damage(), 1.0/_get_speed())
-		else:
-			emit_signal("action_idle", 1.0/_get_speed())
 	
 
 

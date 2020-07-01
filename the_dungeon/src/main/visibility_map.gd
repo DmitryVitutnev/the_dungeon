@@ -2,7 +2,7 @@ extends Node2D
 class_name VisibilityMap
 
 
-const VIEWPORT_DISTANCE := Vector2(10, 6)
+const VIEWPORT_DISTANCE := Vector2(12, 8)
 
 
 var _size : Vector2

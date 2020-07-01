@@ -8,8 +8,10 @@
 script = ExtResource( 1 )
 name = "sword"
 value = 1
-damage = "1d8"
+damage = "1d6"
 armor = 0
+max_health = 0
+speed = 0
 slot = "MAIN_HAND"
 icon = ExtResource( 2 )
 texture = ExtResource( 3 )

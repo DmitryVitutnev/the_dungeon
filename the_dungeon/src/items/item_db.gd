@@ -3,6 +3,13 @@ extends Node
 const STATS_PATH := "res://assets/items/stats/"
 const MODIFIERS_PATH := "res://assets/items/modifiers/"
 
+enum Rarity {
+	GRAY, WHITE, BLUE, YELLOW, ORANGE
+}
+
+#Temporal solution
+var sword_stats := load("res://assets/items/stats/sword.tres")
+
 
 var _stats := []
 var _modifiers := []
@@ -31,8 +38,26 @@ func _ready() -> void:
 func generate_item() -> Item:
 	var item := Item.new()
 	item._stats = _stats[randi() % _stats.size()]
-	item._modifiers.append(_modifiers[randi() % _modifiers.size()])
-	item._modifiers.append(_modifiers[randi() % _modifiers.size()])
+	item.rarity = Rarity.WHITE
+	if Roll.d3(1) == 3:
+		item._modifiers.append(_modifiers[randi() % _modifiers.size()])
+		item.rarity = Rarity.BLUE
+		if Roll.d3(1) == 3:
+			item._modifiers.append(_modifiers[randi() % _modifiers.size()])
+			item.rarity = Rarity.YELLOW
+			if Roll.d3(1) == 3:
+				item.ancient = true
+				item.rarity = Rarity.ORANGE
+	
+	add_child(item)
+	_items.append(item)
+	return item
+
+
+func generate_weapon() -> Item:
+	var item = Item.new()
+	item._stats = sword_stats
+	item.rarity = Rarity.WHITE
 	add_child(item)
 	_items.append(item)
 	return item

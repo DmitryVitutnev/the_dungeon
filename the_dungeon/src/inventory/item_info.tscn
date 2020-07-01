@@ -11,22 +11,21 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Name" type="Label" parent="."]
+[node name="Name" type="RichTextLabel" parent="."]
 margin_left = 16.0
+margin_top = 16.0
 margin_right = 144.0
-margin_bottom = 48.0
-text = "Fire sword of flames "
-align = 1
-autowrap = true
+margin_bottom = 112.0
+bbcode_enabled = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Stats" type="Label" parent="."]
 margin_left = 16.0
-margin_top = 48.0
+margin_top = 64.0
 margin_right = 160.0
-margin_bottom = 112.0
+margin_bottom = 128.0
 text = "damage : error
 armor : error"
 autowrap = true

@@ -20,11 +20,9 @@ var _player : PlayerActor
 
 onready var _map := $Map as Map
 onready var _visibility_map := $VisibilityMap as VisibilityMap
+onready var _loot_map := $LootMap as LootMap
 onready var _actor_controller := $ActorController as ActorController
 onready var _ui := $UI as UI
-onready var _win_screen = $UI/WinScreen
-onready var _defeat_screen = $UI/DefeatScreen
-onready var _inventory = $UI/Inventory
 
 
 func _ready() -> void:
@@ -38,17 +36,14 @@ func _start_game() -> void:
 	_player = _player_scene.instance() as Actor
 	add_child(_player)
 	_player.initialize(_map, _actor_controller._actor_list)
-	_player.connect("stats_changed", self, "_player_health_changed")
 	_player.connect("death", self, "_defeat")
+	_player.connect("item_picked_up", _loot_map, "remove_item")
+	_player.connect("item_dropped", _loot_map, "add_item")
 	
-	_inventory.connect("item_equipped", _player, "equip_item")
-	_inventory.connect("item_unequipped", _player, "unequip_item")
+	_ui.initialize(_player, _loot_map)
 	
 	_current_level = -1
 	_next_level()
-	_win_screen.visible = false
-	_defeat_screen.visible = false
-	_inventory.visible = false
 
 
 func _next_level() -> void:
@@ -58,45 +53,58 @@ func _next_level() -> void:
 		_win()
 		return
 	
-	# Temporal solution. So player will have some items each level
-	for i in range(2):
-		var item = ItemDB.generate_item()
-		_inventory.pickup_item(item)
-	
 	_map.build_level(LEVEL_SIZES[_current_level], LEVEL_ROOM_COUNTS[_current_level])
 	_visibility_map.reset(LEVEL_SIZES[_current_level])
+	_loot_map.reset(LEVEL_SIZES[_current_level])
 	_actor_controller.clear()
 	_actor_controller.add_player(_player)
 	
 	for i in range(LEVEL_ENEMY_COUNTS[_current_level]):
 		var enemy := _enemy_scene.instance() as Actor
 		_actor_controller.add_enemy(enemy)
+		enemy.connect("item_picked_up", _loot_map, "remove_item")
+		enemy.connect("item_dropped", _loot_map, "add_item")
 		for j in range(_current_level + 1):
-			enemy.equip_item(ItemDB.generate_item())
+			var item := ItemDB.generate_item()
+			enemy.pickup_item(item)
+			enemy.equip_item(item)
 	_actor_controller.start_game()
 	
-	_ui.set_health(_player.health)
-	_ui.set_level(_current_level + 1)
 	
-
-func _player_health_changed() -> void:
-	_ui.set_health(_player.health)
+	#Temporal solution
+	if _current_level == 0:
+		var sword = ItemDB.generate_weapon()
+		var pos : Vector2
+		var dirs = [Vector2(0, 1), Vector2(0, -1), Vector2(1, 0), Vector2(-1, 0)]
+		dirs.shuffle()
+		for dir in dirs:
+			if _map.is_free(_player.pos + dir):
+				pos = _player.pos + dir
+				break
+		_loot_map.add_item(sword, pos)
+	
+	_ui._set_health(_player.health)
+	_ui.set_level(_current_level + 1)
 
 
 func _win() -> void:
-	_win_screen.visible = true
+	_ui._win_screen.visible = true
 
 
 func _defeat(player : Actor) -> void:
-	_start_game()
-	_defeat_screen.visible = true
+	_ui._defeat_screen.visible = true
 
 
 func _input(event):
 	if event.is_action_pressed("interact"):
+		var items := _loot_map.get_items_by_pos(_player.pos)
+		for i in items:
+			var item := i as Item
+			if (_ui._inventory.pickup_item(item)):
+				item.emit_signal("taken", item)
 		if _player.pos == _map.exit_pos:
 			_next_level()
 	if event.is_action_pressed("restart"):
 		get_tree().reload_current_scene()
 	if event.is_action_pressed("inv_open"):
-		_inventory.visible = !_inventory.visible
+		_ui._inventory.visible = !_ui._inventory.visible

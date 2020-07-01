@@ -49,6 +49,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/actors/actor_stats.gd"
 }, {
+"base": "Position2D",
+"class": "DamagePopup",
+"language": "GDScript",
+"path": "res://src/utils/damage_popup.gd"
+}, {
 "base": "Panel",
 "class": "EquipmentSlots",
 "language": "GDScript",
@@ -94,6 +99,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/items/item_stats.gd"
 }, {
+"base": "Control",
+"class": "LootInfo",
+"language": "GDScript",
+"path": "res://src/items/loot_info.gd"
+}, {
+"base": "Node2D",
+"class": "LootMap",
+"language": "GDScript",
+"path": "res://src/items/loot_map.gd"
+}, {
 "base": "Node2D",
 "class": "Map",
 "language": "GDScript",
@@ -133,6 +148,7 @@ _global_script_class_icons={
 "ActorMover": "",
 "ActorSound": "",
 "ActorStats": "",
+"DamagePopup": "",
 "EquipmentSlots": "",
 "GridBackPack": "",
 "HealthBar": "",
@@ -142,6 +158,8 @@ _global_script_class_icons={
 "ItemInfo": "",
 "ItemModifier": "",
 "ItemStats": "",
+"LootInfo": "",
+"LootMap": "",
 "Map": "",
 "PlayerActor": "",
 "StartingStats": "",

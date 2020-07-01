@@ -4,6 +4,8 @@ class_name Inventory
 
 signal item_equipped(item)
 signal item_unequipped(item)
+signal item_picked_up(item)
+signal item_dropped(item)
 
 
 const ITEM_BASE := preload("res://src/inventory/item_base.tscn")
@@ -34,16 +36,15 @@ func _process(delta) -> void:
 		
 
 
-func pickup_item(item_info : Item):
+func pickup_item(item_info : Item) -> bool:
 	var item = ITEM_BASE.instance()
 	item.item_info = item_info
 	item.texture = item_info.icon
 	items.add_child(item)
 	if !grid_bkpk.insert_item_at_first_available_slot(item):
-		# Code for not picking up when inventory is full
 		item.queue_free()
 		return false
-	# Code for picking up
+	emit_signal("item_picked_up", item_info)
 	return true
 
 
@@ -55,7 +56,7 @@ func _grab(cursor_pos) -> void:
 			_last_container = c
 			_last_pos = _item_held.rect_global_position
 			_item_offset = _item_held.rect_global_position - cursor_pos
-			move_child(_item_held, get_child_count())
+			items.move_child(_item_held, items.get_child_count())
 
 
 func _release(cursor_pos) -> void:
@@ -87,6 +88,7 @@ func _get_container_under_cursor(cursor_pos):
 
 
 func _drop_item() -> void:
+	emit_signal("item_dropped", _item_held.item_info)
 	_item_held.queue_free()
 	_item_held = null
 

@@ -22,6 +22,7 @@ func initialize(map : Map, visibility_map : VisibilityMap) -> void:
 	_map = map
 	_visibility_map = visibility_map
 
+
 func start_game() -> void:
 	var actor := _turn_queue.get_current_actor() as Actor
 	actor.start_turn()

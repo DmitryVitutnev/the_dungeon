@@ -1,0 +1,13 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://src/items/item_modifier.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+prefix_name = "dueling"
+postfix_name = "of duelist"
+value = 0
+damage = "1"
+armor = 1
+speed = 0
+max_health = 0

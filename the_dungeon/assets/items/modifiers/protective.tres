@@ -4,8 +4,10 @@
 
 [resource]
 script = ExtResource( 1 )
-prefix_name = "solid"
-postfix_name = "of solidness"
+prefix_name = "protective"
+postfix_name = "of protection"
 value = 1
 damage = ""
 armor = 1
+speed = 0
+max_health = 0

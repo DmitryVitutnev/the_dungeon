@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://src/main/map.gd" type="Script" id=1]
 [ext_resource path="res://assets/sprites/tiles/exit.png" type="Texture" id=2]
@@ -16,6 +16,9 @@
 [ext_resource path="res://assets/sprites/tiles/black.png" type="Texture" id=14]
 [ext_resource path="res://src/main/visibility_map.gd" type="Script" id=15]
 [ext_resource path="res://src/main/ui.gd" type="Script" id=16]
+[ext_resource path="res://src/items/loot_map.gd" type="Script" id=17]
+[ext_resource path="res://assets/sprites/tiles/loot_bag.png" type="Texture" id=18]
+[ext_resource path="res://src/items/loot_info.gd" type="Script" id=19]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
@@ -120,6 +123,22 @@ points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
 4/z_index = 0
 
 [sub_resource type="TileSet" id=5]
+0/name = "loot_bag.png 0"
+0/texture = ExtResource( 18 )
+0/tex_offset = Vector2( 0, 0 )
+0/modulate = Color( 1, 1, 1, 1 )
+0/region = Rect2( 0, 0, 32, 32 )
+0/tile_mode = 0
+0/occluder_offset = Vector2( 0, 0 )
+0/navigation_offset = Vector2( 0, 0 )
+0/shape_offset = Vector2( 0, 0 )
+0/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+0/shape_one_way = false
+0/shape_one_way_margin = 0.0
+0/shapes = [  ]
+0/z_index = 0
+
+[sub_resource type="TileSet" id=6]
 0/name = "black.png 0"
 0/texture = ExtResource( 14 )
 0/tex_offset = Vector2( 0, 0 )
@@ -146,6 +165,14 @@ tile_set = SubResource( 4 )
 cell_size = Vector2( 32, 32 )
 format = 1
 
+[node name="LootMap" type="Node2D" parent="."]
+script = ExtResource( 17 )
+
+[node name="TileMap" type="TileMap" parent="LootMap"]
+tile_set = SubResource( 5 )
+cell_size = Vector2( 32, 32 )
+format = 1
+
 [node name="ActorController" type="Node2D" parent="."]
 script = ExtResource( 9 )
 
@@ -166,22 +193,29 @@ script = ExtResource( 15 )
 
 [node name="TileMap" type="TileMap" parent="VisibilityMap"]
 z_index = 1
-tile_set = SubResource( 5 )
+tile_set = SubResource( 6 )
 cell_size = Vector2( 32, 32 )
 format = 1
 
 [node name="UI" type="CanvasLayer" parent="."]
 script = ExtResource( 16 )
 
-[node name="BlackLine" type="ColorRect" parent="UI"]
+[node name="TopBar" type="Control" parent="UI"]
 margin_right = 640.0
 margin_bottom = 32.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BlackLine" type="ColorRect" parent="UI/TopBar"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 color = Color( 0, 0, 0, 0.384314 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Health" type="Label" parent="UI"]
+[node name="Health" type="Label" parent="UI/TopBar"]
 margin_right = 128.0
 margin_bottom = 32.0
 text = "Health: ERROR"
@@ -192,7 +226,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Level" type="Label" parent="UI"]
+[node name="Level" type="Label" parent="UI/TopBar"]
 margin_left = 128.0
 margin_right = 224.0
 margin_bottom = 32.0
@@ -204,7 +238,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Move" type="Label" parent="UI"]
+[node name="Move" type="Label" parent="UI/TopBar"]
 margin_left = 224.0
 margin_right = 352.0
 margin_bottom = 32.0
@@ -216,11 +250,11 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Ladder" type="Label" parent="UI"]
+[node name="Ladder" type="Label" parent="UI/TopBar"]
 margin_left = 352.0
-margin_right = 512.0
+margin_right = 480.0
 margin_bottom = 32.0
-text = "USE LADDER - ENTER "
+text = "INTERACT - ENTER"
 align = 1
 valign = 1
 uppercase = true
@@ -228,17 +262,55 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Ladder2" type="Label" parent="UI"]
-margin_left = 512.0
-margin_right = 640.0
+[node name="Restart" type="Label" parent="UI/TopBar"]
+margin_left = 480.0
+margin_right = 643.0
 margin_bottom = 32.0
-text = "Restart - R"
+text = "OPEN INVENTORY - I"
 align = 1
 valign = 1
 uppercase = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="LootInfo" type="Control" parent="UI"]
+margin_left = 416.0
+margin_top = 64.0
+margin_right = 640.0
+margin_bottom = 320.0
+script = ExtResource( 19 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Background" type="ColorRect" parent="UI/LootInfo"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0.384314 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Text" type="RichTextLabel" parent="UI/LootInfo"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 20.0
+margin_top = 40.0
+margin_right = -20.0
+margin_bottom = -20.0
+bbcode_enabled = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="UI/LootInfo"]
+anchor_right = 1.0
+margin_left = 20.0
+margin_top = 20.0
+margin_right = -32.0
+margin_bottom = 46.0
+text = "Press ENTER to pick up:"
 
 [node name="WinScreen" type="ColorRect" parent="UI"]
 visible = false
@@ -283,4 +355,3 @@ __meta__ = {
 }
 
 [node name="Inventory" parent="UI" instance=ExtResource( 13 )]
-visible = false
