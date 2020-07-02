@@ -31,6 +31,7 @@ func start_game() -> void:
 func add_player(player : PlayerActor) -> void:
 	var pos = _map.generate_player_pos()
 	player.pos = pos
+	player.position = 32 * pos
 	_actor_list.player = player
 	
 	_add_actor(player)
@@ -43,6 +44,7 @@ func add_enemy(enemy : Actor) -> void:
 	_actor_list.add_enemy(enemy)
 	enemy.initialize(_map, _actor_list)
 	enemy.pos = pos
+	enemy.position = 32 * pos
 	
 	_add_actor(enemy)
 

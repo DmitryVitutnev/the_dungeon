@@ -6,7 +6,7 @@ var _is_my_turn := false
 
 
 func _input(event) -> void:
-	if !_is_my_turn or dead:
+	if !_is_my_turn or _get_health() <= 0:
 		return
 	var movement := Vector2.ZERO
 	if event.is_action_pressed("left"):

@@ -8,7 +8,7 @@
 script = ExtResource( 1 )
 name = "sword"
 value = 1
-damage = "1d6"
+damage = "1d2+2"
 armor = 0
 max_health = 0
 speed = 0

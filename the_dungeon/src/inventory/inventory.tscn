@@ -113,12 +113,14 @@ __meta__ = {
 
 [node name="Label" type="Label" parent="."]
 margin_left = -272.0
-margin_top = -132.0
+margin_top = -140.0
 margin_right = 20.0
-margin_bottom = -84.0
+margin_bottom = -50.0
 text = "Hold Left Mouse Button to grab item
 Release above proper slot to equip item
-Move item out of inventory window to drop it"
+Move item out of inventory window to drop it
+To replace equiped item with another
+you need to at first unequip the old one"
 __meta__ = {
 "_edit_use_anchors_": false
 }

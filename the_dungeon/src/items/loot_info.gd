@@ -32,6 +32,8 @@ func show_items() -> void:
 				text += "[color=yellow]" + item.full_name + "\n" + "[/color]"
 			ItemDB.Rarity.ORANGE:
 				text += "[color=red]" + item.full_name + "\n" + "[/color]"
+			ItemDB.Rarity.GREEN:
+				text += "[color=green]" + item.full_name + "\n" + "[/color]"
 	_text_box.bbcode_text = text
 	if text == "":
 		visible = false

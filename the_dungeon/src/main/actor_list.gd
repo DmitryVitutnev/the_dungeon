@@ -28,7 +28,7 @@ func get_alive_actor_by_pos(pos : Vector2):
 	if player.pos == pos:
 		return player
 	for i in range(_enemies.size()):
-		if _enemies[i].pos == pos and _enemies[i].dead == false:
+		if _enemies[i].pos == pos and _enemies[i].health > 0:
 			return _enemies[i]
 	return null
 

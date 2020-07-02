@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=27 format=2]
 
 [ext_resource path="res://src/main/map.gd" type="Script" id=1]
 [ext_resource path="res://assets/sprites/tiles/exit.png" type="Texture" id=2]
@@ -19,6 +19,7 @@
 [ext_resource path="res://src/items/loot_map.gd" type="Script" id=17]
 [ext_resource path="res://assets/sprites/tiles/loot_bag.png" type="Texture" id=18]
 [ext_resource path="res://src/items/loot_info.gd" type="Script" id=19]
+[ext_resource path="res://src/utils/fullscreen_banner.gd" type="Script" id=20]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
@@ -188,6 +189,8 @@ script = ExtResource( 10 )
 [node name="ActorAttacker" type="Node2D" parent="ActorController"]
 script = ExtResource( 11 )
 
+[node name="ForPlayer" type="Node2D" parent="."]
+
 [node name="VisibilityMap" type="Node2D" parent="."]
 script = ExtResource( 15 )
 
@@ -238,7 +241,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Move" type="Label" parent="UI/TopBar"]
+[node name="Damage" type="Label" parent="UI/TopBar"]
 margin_left = 224.0
 margin_right = 352.0
 margin_bottom = 32.0
@@ -311,6 +314,50 @@ margin_top = 20.0
 margin_right = -32.0
 margin_bottom = 46.0
 text = "Press ENTER to pick up:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Inventory" parent="UI" instance=ExtResource( 13 )]
+visible = false
+
+[node name="GreetingsScreen" type="ColorRect" parent="UI"]
+visible = false
+margin_right = 640.0
+margin_bottom = 384.0
+color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="UI/GreetingsScreen"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "Hello there!
+This game is hard.
+Sorry.
+Good luck!
+
+You are in the dungeon.
+Your goal is to reach the last level and defeat the evil boss.
+You are nearly naked.
+So you should gather some equipment before rushing in.
+Enemies wear equipment.
+You know what to do...
+
+MOVE / ATTACK - WASD or ARROW KEYS
+PICK UP / USE LADDER - ENTER or SPACE
+OPEN INVENTORY - I
+RESTART - R
+
+PRESS ENTER TO START"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Tween" type="Tween" parent="UI/GreetingsScreen"]
 
 [node name="WinScreen" type="ColorRect" parent="UI"]
 visible = false
@@ -333,11 +380,15 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Tween" type="Tween" parent="UI/WinScreen"]
+
 [node name="DefeatScreen" type="ColorRect" parent="UI"]
 visible = false
+modulate = Color( 1, 1, 1, 0 )
 margin_right = 640.0
 margin_bottom = 384.0
 color = Color( 0, 0, 0, 1 )
+script = ExtResource( 20 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -354,4 +405,4 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Inventory" parent="UI" instance=ExtResource( 13 )]
+[node name="Tween" type="Tween" parent="UI/DefeatScreen"]

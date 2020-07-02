@@ -35,3 +35,5 @@ func remove_actor(actor : Actor):
 
 func clear() -> void:
 	_queue = []
+	_current_time = 0.0
+	_time_passed = 0.0

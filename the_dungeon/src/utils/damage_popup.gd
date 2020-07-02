@@ -18,5 +18,4 @@ func _ready():
 
 
 func _on_tween_all_completed():
-	print(position)
 	self.queue_free()

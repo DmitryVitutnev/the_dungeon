@@ -23,6 +23,28 @@ func from_string(string : String) -> int:
 	return result
 
 
+func from_d_to_interval(string : String) -> String:
+	var parts := string.split("+")
+	var min_v := 0
+	var max_v := 0
+	for p in parts:
+		if p.find("d") == -1:
+			min_v += p.to_int()
+			max_v += p.to_int()
+		else:
+			var sub_parts = p.split("d")
+			var number = sub_parts[0].to_int()
+			var dice = sub_parts[1].to_int()
+			min_v += number
+			max_v += number * dice
+	var result
+	if min_v == max_v:
+		result = str(min_v)
+	else:
+		result = str(min_v) + "-" + str(max_v)
+	return result
+
+
 func d2(number : int) -> int:
 	return dx(number, 2)
 

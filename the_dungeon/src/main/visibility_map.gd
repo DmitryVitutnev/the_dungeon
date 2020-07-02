@@ -18,6 +18,7 @@ func initialize(map : Map) -> void:
 
 func reset(size : Vector2):
 	_size = size
+	_tilemap.clear()
 	for x in range(-VIEWPORT_DISTANCE.x, _size.x + VIEWPORT_DISTANCE.x + 1, 1):
 		for y in range(-VIEWPORT_DISTANCE.y, _size.y + VIEWPORT_DISTANCE.y + 1, 1):
 			_tilemap.set_cell(x, y, 0)

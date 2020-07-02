@@ -44,7 +44,7 @@ func _chase_player() -> void:
 			var move_dir := (path[1] - pos) as Vector2
 			emit_signal("action_move", pos + move_dir, 1.0/_get_speed())
 		else:
-			emit_signal("action_idle", 2)
+			emit_signal("action_idle", 1.0/_get_speed())
 	elif path.size() == 2:
 		if _actor_list.player.pos == path[1]:
 			emit_signal("action_attack", _actor_list.player, _get_damage(), 1.0/_get_speed())
