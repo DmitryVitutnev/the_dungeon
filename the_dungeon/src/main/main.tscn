@@ -347,8 +347,8 @@ You know what to do...
 
 MOVE / ATTACK - WASD or ARROW KEYS
 PICK UP / USE LADDER - ENTER or SPACE
-OPEN INVENTORY - I
-RESTART - R
+OPEN INVENTORY - I or E
+RESTART - BACKSPACE
 
 PRESS ENTER TO START"
 align = 1
@@ -373,7 +373,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 text = "You Won!
 Congratulations!!!
-Press R to start new game"
+
+Press BACKSPACE to start new game"
 align = 1
 valign = 1
 __meta__ = {
@@ -398,7 +399,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 text = "You Died
 Try to be more carefull next time
-Press R to restart"
+
+HINT: Most enemies are slower than you. Try using that as an advantage.
+
+Press BACKSPACE to restart"
 align = 1
 valign = 1
 __meta__ = {
