@@ -24,6 +24,8 @@ func initialize(player : Actor, loot_map : LootMap):
 	player.connect("pos_changed", self, "_player_pos_changed")
 	player.connect("item_dropped", self, "_player_item_dropped")
 	player.connect("item_picked_up", self, "_player_item_picked_up")
+	
+	_player_stats_changed(player)
 
 
 func set_level(value : int) -> void:
