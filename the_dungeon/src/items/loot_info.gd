@@ -30,7 +30,7 @@ func show_items() -> void:
 				text += "[color=blue]" + item.full_name + "\n" + "[/color]"
 			ItemDB.Rarity.YELLOW:
 				text += "[color=yellow]" + item.full_name + "\n" + "[/color]"
-			ItemDB.Rarity.ORANGE:
+			ItemDB.Rarity.RED:
 				text += "[color=red]" + item.full_name + "\n" + "[/color]"
 			ItemDB.Rarity.GREEN:
 				text += "[color=green]" + item.full_name + "\n" + "[/color]"

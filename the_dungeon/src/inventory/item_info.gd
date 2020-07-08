@@ -24,7 +24,7 @@ func _update_text() -> void:
 			name_text.bbcode_text = "[color=blue]" + name_text.bbcode_text + "[/color]"
 		ItemDB.Rarity.YELLOW:
 			name_text.bbcode_text = "[color=yellow]" + name_text.bbcode_text + "[/color]"
-		ItemDB.Rarity.ORANGE:
+		ItemDB.Rarity.RED:
 			name_text.bbcode_text = "[color=red]" + name_text.bbcode_text + "[/color]"
 		ItemDB.Rarity.GREEN:
 			name_text.bbcode_text = "[color=green]" + name_text.bbcode_text + "[/color]"

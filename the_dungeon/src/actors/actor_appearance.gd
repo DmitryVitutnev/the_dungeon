@@ -14,16 +14,18 @@ func _ready() -> void:
 		_slots[s.name] = s
 
 
-func set_texture(texture : Texture, slot : String) -> void:
+func set_item_in_slot(item : Item, slot : String) -> void:
 	if _slots.has(slot):
 		var s = _slots[slot] as Sprite
-		s.texture = texture
+		s.texture = item.texture
+		s.set_material(ItemDB.outline_materials[item.rarity])
 
 
 func free_slot(slot : String) -> void:
 	if _slots.has(slot):
 		var s = _slots[slot] as Sprite
 		s.texture = null
+		s.set_material(null)
 
 
 func set_alive() -> void:

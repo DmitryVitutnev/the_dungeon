@@ -1,8 +1,10 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://src/inventory/item_base.gd" type="Script" id=1]
+[ext_resource path="res://assets/shaders/white_outline_material.tres" type="Material" id=2]
 
 [node name="ItemBase" type="TextureRect"]
+material = ExtResource( 2 )
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false

@@ -5,7 +5,15 @@ const MODIFIERS_PATH := "res://assets/items/modifiers/"
 const UNIQUE_STATS_PATH := "res://assets/items/unique_stats/"
 
 enum Rarity {
-	GRAY, WHITE, BLUE, YELLOW, ORANGE, GREEN
+	GRAY, WHITE, BLUE, YELLOW, RED, GREEN
+}
+
+var outline_materials := {
+	Rarity.WHITE : null,
+	Rarity.BLUE : preload("res://assets/shaders/blue_outline_material.tres"),
+	Rarity.YELLOW : preload("res://assets/shaders/yellow_outline_material.tres"),
+	Rarity.RED : preload("res://assets/shaders/red_outline_material.tres"),
+	Rarity.GREEN : preload("res://assets/shaders/green_outline_material.tres"),
 }
 
 #Temporal solution
@@ -99,7 +107,7 @@ func _generate_item_from_list(list : Array) -> Item:
 			item.rarity = Rarity.YELLOW
 			if Roll.d3(1) == 3:
 				item.ancient = true
-				item.rarity = Rarity.ORANGE
+				item.rarity = Rarity.RED
 	add_child(item)
 	_items.append(item)
 	return item

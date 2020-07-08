@@ -75,7 +75,7 @@ func drop_item(item : Item) -> void:
 
 func equip_item(item : Item) -> void:
 	_equipped_items[item.slot] = item
-	_appearance.set_texture(item.texture, item.slot)
+	_appearance.set_item_in_slot(item, item.slot)
 	item.connect("taken", self, "unequip_item")
 
 

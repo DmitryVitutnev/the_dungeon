@@ -38,9 +38,8 @@ func _process(delta) -> void:
 
 func pickup_item(item_info : Item) -> bool:
 	var item = ITEM_BASE.instance()
-	item.item_info = item_info
-	item.texture = item_info.icon
 	items.add_child(item)
+	item.item_info = item_info
 	if !grid_bkpk.insert_item_at_first_available_slot(item):
 		item.queue_free()
 		return false
