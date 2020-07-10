@@ -2,14 +2,18 @@ extends Node2D
 class_name ActorController
 
 
+const ACTION_IDLE_COST := 10
+const ACTION_MOVE_COST := 20
+const ACTION_ATTACK_COST := 20
+
 
 var _map : Map
 var _visibility_map : VisibilityMap
-var _current_delay := 0.0
+var _current_energy_loss := 0
 
 
 onready var _actor_list := $ActorList as ActorList
-onready var _turn_queue := $TurnQueue as TurnQueue
+onready var _turn_manager := $TurnManager as TurnManager
 onready var _actor_mover := $ActorMover as ActorMover
 onready var _actor_attacker := $ActorAttacker as ActorAttacker
 
@@ -24,8 +28,7 @@ func initialize(map : Map, visibility_map : VisibilityMap) -> void:
 
 
 func start_game() -> void:
-	var actor := _turn_queue.get_current_actor() as Actor
-	actor.start_turn()
+	_turn_manager.start()
 
 
 func add_player(player : PlayerActor) -> void:
@@ -50,39 +53,35 @@ func add_enemy(enemy : Actor) -> void:
 
 
 func clear() -> void:
-	_turn_queue.clear()
+	_turn_manager.clear()
 	_actor_list.clear_enemies()
 	_actor_mover.clear()
 	_actor_attacker.clear()
 
 
 func _add_actor(actor : Actor) -> void:
-	_turn_queue.push_actor_and_time(actor, 0)
+	_turn_manager.add_actor(actor)
 	actor.connect("action_idle", self, "_actor_idle")
 	actor.connect("action_move", self, "_actor_move")
 	actor.connect("action_attack", self, "_actor_attack")
-	
-	actor.connect("death", self,"_actor_death")
 
 
 func _remove_actor(actor : Actor) -> void:
 	actor.disconnect("action_idle", self, "_actor_idle")
 	actor.disconnect("action_move", self, "_actor_move")
 	actor.disconnect("action_attack", self, "_actor_attack")
-	actor.disconnect("death", self,"_actor_death")
-	_turn_queue.remove_actor(actor)
+	_turn_manager.remove_actor(actor)
 	_actor_list.remove(actor)
 	actor.get_parent().remove_child(actor)
 
 
-func _actor_idle(delay : float) -> void:
-	_current_delay = delay
+func _actor_idle(actor : Actor) -> void:
+	_current_energy_loss = ACTION_IDLE_COST
 	_next_turn()
 
 
-func _actor_move(target_pos : Vector2, delay : float) -> void:
-	_current_delay = delay
-	var actor := _turn_queue.get_current_actor() as Actor
+func _actor_move(actor : Actor, target_pos : Vector2) -> void:
+	_current_energy_loss = ACTION_MOVE_COST
 	_actor_mover.move_actor(actor, target_pos)
 	actor.pos = target_pos
 	
@@ -92,22 +91,13 @@ func _actor_move(target_pos : Vector2, delay : float) -> void:
 	_next_turn()
 
 
-func _actor_attack(target_actor : Actor, damage : String, delay : float) -> void:
-	_current_delay = delay
+func _actor_attack(actor : Actor, target_actor : Actor, damage : String) -> void:
+	_current_energy_loss = ACTION_ATTACK_COST
 	target_actor.take_damage(max(0, Roll.from_string(damage) - target_actor.armor))
-	var actor := _turn_queue.get_current_actor() as Actor
 	_actor_attacker.attack_actor(actor, target_actor.pos)
 
 
-func _actor_death(actor : Actor) -> void:
-	pass
-	#_current_delay = 1000
-	#_turn_queue.remove_actor(actor)
-	#_actor_list.remove(actor)
-
-
 func _next_turn():
-	_turn_queue.next_turn(_current_delay)
-	var actor := _turn_queue.get_current_actor() as Actor
-	actor.start_turn()
+	if !_actor_list.player.dead:
+		_turn_manager.end_turn(_current_energy_loss)
 	

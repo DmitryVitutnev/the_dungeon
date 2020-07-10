@@ -43,7 +43,7 @@ func insert_item(item : ItemInInventory) -> bool:
 	return true
 
 
-func grab_item(pos):
+func grab_item(pos) -> ItemInInventory:
 	var item = _get_item_under_pos(pos)
 	if item == null:
 		return null

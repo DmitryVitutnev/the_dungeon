@@ -2,9 +2,9 @@ extends Node2D
 class_name Actor
 
 
-signal action_idle(delay)
-signal action_move(target_pos, delay)
-signal action_attack(target_actor, damage, delay)
+signal action_idle(actor)
+signal action_move(actor, target_pos)
+signal action_attack(actor, target_actor, damage)
 
 signal death(actor)
 signal stats_changed(actor)

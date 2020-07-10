@@ -42,18 +42,18 @@ func _chase_player() -> void:
 	if path.size() > 2:
 		if _actor_list.get_alive_actor_by_pos(path[1]) == null:
 			var move_dir := (path[1] - pos) as Vector2
-			emit_signal("action_move", pos + move_dir, 1.0/_get_speed())
+			emit_signal("action_move", self, pos + move_dir)
 		else:
-			emit_signal("action_idle", 1.0/_get_speed())
+			emit_signal("action_idle", self)
 	elif path.size() == 2:
 		if _actor_list.player.pos == path[1]:
-			emit_signal("action_attack", _actor_list.player, _get_damage(), 1.0/_get_speed())
+			emit_signal("action_attack", self, _actor_list.player, _get_damage())
 		else:
 			var move_dir := (path[1] - pos) as Vector2
 			_saw_player = false
-			emit_signal("action_move", pos + move_dir, 1.0/_get_speed())
+			emit_signal("action_move", self, pos + move_dir)
 	else:
-		emit_signal("action_idle", 2)
+		emit_signal("action_idle", self)
 
 
 func _wander() -> void:
@@ -62,8 +62,8 @@ func _wander() -> void:
 		if _map.is_free(pos + dir):
 			options.append(dir)
 	var move_dir := options[randi() % options.size()] as Vector2
-	emit_signal("action_move", pos + move_dir, 1.0/_get_speed())
+	emit_signal("action_move", self, pos + move_dir)
 
 
 func _idle() -> void:
-	emit_signal("action_idle", 1.0/_get_speed())
+	emit_signal("action_idle", self)

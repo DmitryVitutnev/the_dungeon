@@ -15,6 +15,7 @@ var _item_held : ItemInInventory
 var _item_offset : Vector2
 var _last_container : Control
 var _last_pos : Vector2
+var _item_can_be_returned : bool
 
 
 onready var inv_base := $Main/InventoryBase
@@ -23,17 +24,31 @@ onready var eq_slots := $Main/EquipmentSlots as EquipmentSlots
 onready var items := $Items as Control
 
 
-func _process(delta) -> void:	
+func _process(delta) -> void:
 	if !visible:
 		return
 	var cursor_pos := get_global_mouse_position()
-	if Input.is_action_just_pressed("inv_grab"):
-		_grab(cursor_pos)
-	if Input.is_action_just_released("inv_grab"):
-		_release(cursor_pos)
 	if _item_held != null:
 		_item_held.rect_global_position = cursor_pos + _item_offset
-		
+
+
+func _input(event):
+	if !visible:
+		return
+	var cursor_pos := get_global_mouse_position()
+	if event.is_action_pressed("inv_grab"):
+		if _item_held == null:
+			_grab(cursor_pos)
+		else:
+			_release(cursor_pos)
+	if event.is_action_pressed("inv_drop"):
+		if _item_held == null:
+			_grab(cursor_pos)
+			if _item_held != null:
+				_drop_item()
+		else:
+			if _item_can_be_returned:
+				_return_item()
 
 
 func pickup_item(item_info : Item) -> bool:
@@ -52,9 +67,12 @@ func _grab(cursor_pos) -> void:
 	if c != null and c.has_method("grab_item"):
 		_item_held = c.grab_item(cursor_pos)
 		if _item_held != null:
+			if c == eq_slots:
+				emit_signal("item_unequipped", _item_held.item_info)
+			_item_can_be_returned = true
 			_last_container = c
 			_last_pos = _item_held.rect_global_position
-			_item_offset = _item_held.rect_global_position - cursor_pos
+			_item_offset = -_item_held.rect_size / 2
 			items.move_child(_item_held, items.get_child_count())
 
 
@@ -66,15 +84,24 @@ func _release(cursor_pos) -> void:
 		_drop_item()
 	elif c.has_method("insert_item"):
 		if c.insert_item(_item_held):
-			if _last_container == eq_slots:
-				emit_signal("item_unequipped", _item_held.item_info)
 			if c == eq_slots:
 				emit_signal("item_equipped", _item_held.item_info)
 			_item_held = null
 		else:
-			_return_item()
-	else:
-		_return_item()
+			var new_item = c.grab_item(cursor_pos)
+			if new_item != null:
+				if c.insert_item(_item_held):
+					if c == eq_slots:
+						emit_signal("item_unequipped", new_item.item_info)
+						emit_signal("item_equipped", _item_held.item_info)
+					_item_can_be_returned = false
+					_item_held = new_item
+					_last_pos = _item_held.rect_global_position
+					_last_container = c
+					_item_offset = -_item_held.rect_size / 2
+					items.move_child(_item_held, items.get_child_count())
+				else:
+					c.insert_item(new_item)
 
 
 func _get_container_under_cursor(cursor_pos):
@@ -93,6 +120,8 @@ func _drop_item() -> void:
 
 
 func _return_item() -> void:
+	if _last_container == eq_slots:
+		emit_signal("item_equipped", _item_held.item_info)
 	_item_held.rect_global_position = _last_pos
 	_last_container.insert_item(_item_held)
 	_item_held = null

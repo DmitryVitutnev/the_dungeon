@@ -23,9 +23,9 @@ func _input(event) -> void:
 			_is_my_turn = false
 			var actor = _actor_list.get_alive_actor_by_pos(target_pos)
 			if actor == null:
-				emit_signal("action_move", target_pos, 1.0/_get_speed())
+				emit_signal("action_move", self, target_pos)
 			else:
-				emit_signal("action_attack", actor, _get_damage(), 1.0/_get_speed())
+				emit_signal("action_attack", self, actor, _get_damage())
 	
 
 

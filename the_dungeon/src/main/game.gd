@@ -146,7 +146,7 @@ func _boss_killed(boss : Actor) -> void:
 func _input(event):
 	if event.is_action_pressed("restart"):
 		get_tree().reload_current_scene()
-	if _player.health <= 0:
+	if _player.dead:
 		return
 	if _game_just_started:
 		if event.is_action_pressed("interact"):

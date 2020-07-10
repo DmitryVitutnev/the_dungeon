@@ -7,7 +7,7 @@
 [ext_resource path="res://assets/sprites/tiles/floor.png" type="Texture" id=5]
 [ext_resource path="res://assets/sprites/tiles/brick_wall.png" type="Texture" id=6]
 [ext_resource path="res://src/main/game.gd" type="Script" id=7]
-[ext_resource path="res://src/main/turn_queue.gd" type="Script" id=8]
+[ext_resource path="res://src/main/turn_manager.gd" type="Script" id=8]
 [ext_resource path="res://src/main/actor_controller.gd" type="Script" id=9]
 [ext_resource path="res://src/main/actor_mover.gd" type="Script" id=10]
 [ext_resource path="res://src/main/actor_attacker.gd" type="Script" id=11]
@@ -180,7 +180,7 @@ script = ExtResource( 9 )
 [node name="ActorList" type="Node2D" parent="ActorController"]
 script = ExtResource( 12 )
 
-[node name="TurnQueue" type="Node2D" parent="ActorController"]
+[node name="TurnManager" type="Node2D" parent="ActorController"]
 script = ExtResource( 8 )
 
 [node name="ActorMover" type="Node2D" parent="ActorController"]
