@@ -30,7 +30,7 @@ func update_fog(player_pos : Vector2):
 	var end_pos := Vector2(min(_size.x - 1, player_pos.x + VIEWPORT_DISTANCE.x), min(_size.y, player_pos.y + VIEWPORT_DISTANCE.y))
 	for x in range(start_pos.x, end_pos.x + 1, 1):
 		for y in range(start_pos.y, end_pos.y + 1, 1):
-			_tilemap.set_cell(x, y, 0)
+			#_tilemap.set_cell(x, y, 0)
 			if _tilemap.get_cell(x, y) == 0:
 				for x_dir in range(-1, 2, 2):
 					for y_dir in range(-1, 2, 2):
@@ -41,4 +41,9 @@ func update_fog(player_pos : Vector2):
 								var occlusion = space_state.intersect_ray(player_point, test_point)
 								if !occlusion or (occlusion.position - test_point).length() < 2:
 									_tilemap.set_cell(x, y, -1)
+
+
+func pos_is_visible(pos : Vector2) -> bool:
+	return _tilemap.get_cell(pos.x, pos.y) == -1
+
 

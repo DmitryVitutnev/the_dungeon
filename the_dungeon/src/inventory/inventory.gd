@@ -32,9 +32,7 @@ func _process(delta) -> void:
 		_item_held.rect_global_position = cursor_pos + _item_offset
 
 
-func _input(event):
-	if !visible:
-		return
+func handle_input(event):
 	var cursor_pos := get_global_mouse_position()
 	if event.is_action_pressed("inv_grab"):
 		if _item_held == null:

@@ -26,6 +26,7 @@ onready var _visibility_map := $VisibilityMap as VisibilityMap
 onready var _loot_map := $LootMap as LootMap
 onready var _actor_controller := $ActorController as ActorController
 onready var _ui := $UI as UI
+onready var _inventory := $UI/Inventory as Inventory
 onready var _greetings := $UI/GreetingsScreen
 onready var _for_player := $ForPlayer
 
@@ -64,6 +65,11 @@ func _next_level() -> void:
 		_boss_alive = true
 		_spawn_boss()
 	
+	var tween = Tween.new()
+	add_child(tween)
+	tween.interpolate_callback(_visibility_map, 0.01, "update_fog", _player.pos)
+	tween.interpolate_callback(tween, 0, "_queue_free")
+	tween.start()
 	_actor_controller.start_game()
 
 
@@ -151,7 +157,6 @@ func _input(event):
 	if _game_just_started:
 		if event.is_action_pressed("interact"):
 			_game_just_started = false
-			_visibility_map.update_fog(_player.pos)
 			_greetings.visible = false
 		return
 	if event.is_action_pressed("interact"):
@@ -162,5 +167,13 @@ func _input(event):
 				item.emit_signal("taken", item)
 		if _player.pos == _map.exit_pos and !_boss_alive:
 			_next_level()
+		return
 	if event.is_action_pressed("inv_open"):
-		_ui._inventory.visible = !_ui._inventory.visible
+		_inventory.visible = !_ui._inventory.visible
+		return
+	if _inventory.visible:
+		_inventory.handle_input(event)
+	else:
+		var click_pos := _map.coord_to_pos(get_global_mouse_position())
+		if !((event is InputEventMouseButton or event is InputEventScreenTouch) and !_visibility_map.pos_is_visible(click_pos)):
+			_player.handle_input(event)

@@ -19,6 +19,7 @@ export var starting_stats : Resource
 var damage_popup = load("res://src/utils/damage_popup.tscn")
 
 
+var in_animation := false
 var pos : Vector2 setget _set_pos
 var dead : bool setget , _is_dead
 var health : int setget _set_health, _get_health
@@ -77,12 +78,14 @@ func equip_item(item : Item) -> void:
 	_equipped_items[item.slot] = item
 	_appearance.set_item_in_slot(item, item.slot)
 	item.connect("taken", self, "unequip_item")
+	emit_signal("stats_changed", self)
 
 
 func unequip_item(item : Item) -> void:
 	_equipped_items.erase(item.slot)
 	_appearance.free_slot(item.slot)
 	item.disconnect("taken", self, "unequip_item")
+	emit_signal("stats_changed", self)
 
 
 func _set_pos(new_pos : Vector2) -> void:
@@ -128,7 +131,10 @@ func _get_damage() -> String:
 	var result := _stats.damage
 	for i in _equipped_items.values():
 		var item := i as Item
-		result += "+" + item.damage
+		if item.damage != "":
+			result += "+" + item.damage
+	if result == "":
+		result = "1"
 	return result
 
 

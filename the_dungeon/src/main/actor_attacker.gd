@@ -1,12 +1,13 @@
 extends Node2D
-class_name ActorAttacker
 
 
 signal finished()
 
-
 # Speed is in tiles per second
-var MOVE_SPEED = 5
+const MOVE_SPEED = 5
+
+
+var working : bool setget ,_is_working
 
 
 var _active := false
@@ -44,3 +45,7 @@ func attack_actor(actor : Actor, target : Vector2) -> void:
 
 func clear() -> void:
 	_active = false
+
+
+func _is_working() -> bool:
+	return _actor.size() > 0

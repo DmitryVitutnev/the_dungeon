@@ -14,12 +14,10 @@ var _current_energy_loss := 0
 
 onready var _actor_list := $ActorList as ActorList
 onready var _turn_manager := $TurnManager as TurnManager
-onready var _actor_mover := $ActorMover as ActorMover
-onready var _actor_attacker := $ActorAttacker as ActorAttacker
 
 
 func _ready():
-	_actor_attacker.connect("finished", self, "_next_turn")
+	ActorAttacker.connect("finished", self, "_next_turn")
 
 
 func initialize(map : Map, visibility_map : VisibilityMap) -> void:
@@ -55,8 +53,8 @@ func add_enemy(enemy : Actor) -> void:
 func clear() -> void:
 	_turn_manager.clear()
 	_actor_list.clear_enemies()
-	_actor_mover.clear()
-	_actor_attacker.clear()
+	ActorMover.clear()
+	ActorAttacker.clear()
 
 
 func _add_actor(actor : Actor) -> void:
@@ -82,7 +80,7 @@ func _actor_idle(actor : Actor) -> void:
 
 func _actor_move(actor : Actor, target_pos : Vector2) -> void:
 	_current_energy_loss = ACTION_MOVE_COST
-	_actor_mover.move_actor(actor, target_pos)
+	ActorMover.move_actor(actor, target_pos)
 	actor.pos = target_pos
 	
 	if _actor_list.player == actor:
@@ -94,7 +92,7 @@ func _actor_move(actor : Actor, target_pos : Vector2) -> void:
 func _actor_attack(actor : Actor, target_actor : Actor, damage : String) -> void:
 	_current_energy_loss = ACTION_ATTACK_COST
 	target_actor.take_damage(max(0, Roll.from_string(damage) - target_actor.armor))
-	_actor_attacker.attack_actor(actor, target_actor.pos)
+	ActorAttacker.attack_actor(actor, target_actor.pos)
 
 
 func _next_turn():

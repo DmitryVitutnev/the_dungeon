@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://src/main/map.gd" type="Script" id=1]
 [ext_resource path="res://assets/sprites/tiles/exit.png" type="Texture" id=2]
@@ -9,8 +9,6 @@
 [ext_resource path="res://src/main/game.gd" type="Script" id=7]
 [ext_resource path="res://src/main/turn_manager.gd" type="Script" id=8]
 [ext_resource path="res://src/main/actor_controller.gd" type="Script" id=9]
-[ext_resource path="res://src/main/actor_mover.gd" type="Script" id=10]
-[ext_resource path="res://src/main/actor_attacker.gd" type="Script" id=11]
 [ext_resource path="res://src/main/actor_list.gd" type="Script" id=12]
 [ext_resource path="res://src/inventory/inventory.tscn" type="PackedScene" id=13]
 [ext_resource path="res://assets/sprites/tiles/black.png" type="Texture" id=14]
@@ -183,12 +181,6 @@ script = ExtResource( 12 )
 [node name="TurnManager" type="Node2D" parent="ActorController"]
 script = ExtResource( 8 )
 
-[node name="ActorMover" type="Node2D" parent="ActorController"]
-script = ExtResource( 10 )
-
-[node name="ActorAttacker" type="Node2D" parent="ActorController"]
-script = ExtResource( 11 )
-
 [node name="ForPlayer" type="Node2D" parent="."]
 
 [node name="VisibilityMap" type="Node2D" parent="."]
@@ -219,7 +211,8 @@ __meta__ = {
 }
 
 [node name="Health" type="Label" parent="UI/TopBar"]
-margin_right = 128.0
+margin_left = 128.0
+margin_right = 256.0
 margin_bottom = 32.0
 text = "Health: ERROR"
 align = 1
@@ -230,8 +223,7 @@ __meta__ = {
 }
 
 [node name="Level" type="Label" parent="UI/TopBar"]
-margin_left = 128.0
-margin_right = 224.0
+margin_right = 128.0
 margin_bottom = 32.0
 text = "LEVEL: ERROR"
 align = 1
@@ -242,10 +234,10 @@ __meta__ = {
 }
 
 [node name="Damage" type="Label" parent="UI/TopBar"]
-margin_left = 224.0
-margin_right = 352.0
+margin_left = 256.0
+margin_right = 384.0
 margin_bottom = 32.0
-text = "MOVE - WASD"
+text = "DAMAGE: ERROR"
 align = 1
 valign = 1
 uppercase = true
@@ -253,11 +245,11 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Ladder" type="Label" parent="UI/TopBar"]
-margin_left = 352.0
-margin_right = 480.0
+[node name="Armor" type="Label" parent="UI/TopBar"]
+margin_left = 384.0
+margin_right = 512.0
 margin_bottom = 32.0
-text = "INTERACT - ENTER"
+text = "Armor: ERROR"
 align = 1
 valign = 1
 uppercase = true
@@ -265,11 +257,11 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Restart" type="Label" parent="UI/TopBar"]
-margin_left = 480.0
+[node name="Speed" type="Label" parent="UI/TopBar"]
+margin_left = 512.0
 margin_right = 643.0
 margin_bottom = 32.0
-text = "OPEN INVENTORY - I"
+text = "SPEED: ERROR"
 align = 1
 valign = 1
 uppercase = true

@@ -2,8 +2,11 @@ extends CanvasLayer
 class_name UI
 
 
-onready var _health := $TopBar/Health as Label
 onready var _level := $TopBar/Level as Label
+onready var _health := $TopBar/Health as Label
+onready var _damage := $TopBar/Damage as Label
+onready var _armor := $TopBar/Armor as Label
+onready var _speed := $TopBar/Speed as Label
 onready var _loot_info := $LootInfo as LootInfo
 onready var _win_screen := $WinScreen
 onready var _defeat_screen := $DefeatScreen
@@ -34,6 +37,9 @@ func set_level(value : int) -> void:
 
 func _player_stats_changed(player : Actor):
 	_set_health(player.health)
+	_set_damage(player.damage)
+	_set_armor(player.armor)
+	_set_speed(player.speed)
 
 
 func _player_pos_changed(player : Actor) -> void:
@@ -51,3 +57,15 @@ func _player_item_picked_up(item : Item) -> void:
 
 func _set_health(value : int) -> void:
 	_health.text = "Health: " + String(value)
+
+
+func _set_damage(value : String) -> void:
+	_damage.text = "Damage: " + Roll.from_d_to_interval(value)
+
+
+func _set_armor(value : int) -> void:
+	_armor.text = "Armor: " + String(value)
+
+
+func _set_speed(value : int) -> void:
+	_speed.text = "Speed: " + String(value)

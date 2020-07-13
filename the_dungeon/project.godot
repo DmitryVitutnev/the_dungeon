@@ -20,11 +20,6 @@ _global_script_classes=[ {
 "path": "res://src/actors/actor_appearance.gd"
 }, {
 "base": "Node2D",
-"class": "ActorAttacker",
-"language": "GDScript",
-"path": "res://src/main/actor_attacker.gd"
-}, {
-"base": "Node2D",
 "class": "ActorController",
 "language": "GDScript",
 "path": "res://src/main/actor_controller.gd"
@@ -33,11 +28,6 @@ _global_script_classes=[ {
 "class": "ActorList",
 "language": "GDScript",
 "path": "res://src/main/actor_list.gd"
-}, {
-"base": "Node2D",
-"class": "ActorMover",
-"language": "GDScript",
-"path": "res://src/main/actor_mover.gd"
 }, {
 "base": "AudioStreamPlayer2D",
 "class": "ActorSound",
@@ -147,10 +137,8 @@ _global_script_classes=[ {
 _global_script_class_icons={
 "Actor": "",
 "ActorAppearance": "",
-"ActorAttacker": "",
 "ActorController": "",
 "ActorList": "",
-"ActorMover": "",
 "ActorSound": "",
 "ActorStats": "",
 "DamagePopup": "",
@@ -184,6 +172,8 @@ config/icon="res://icon.png"
 
 ItemDB="*res://src/items/item_db.gd"
 Roll="*res://src/utils/roll.gd"
+ActorAttacker="*res://src/main/actor_attacker.gd"
+ActorMover="*res://src/main/actor_mover.gd"
 
 [display]
 

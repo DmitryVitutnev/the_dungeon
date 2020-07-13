@@ -21,7 +21,7 @@ var _id_array := []
 onready var _tile_map := $TileMap as TileMap
 
 
-func is_free(pos: Vector2):
+func is_free(pos : Vector2):
 	return _map[pos.x][pos.y] == Tile.FLOOR or _map[pos.x][pos.y] == Tile.EXIT
 
 
@@ -29,10 +29,15 @@ func pos_to_coord(pos : Vector2) -> Vector2:
 	return position + pos * TILE_SIZE
 
 
+func coord_to_pos(coord : Vector2) -> Vector2:
+	return Vector2(floor((coord.x - position.x) / TILE_SIZE), floor((coord.y - position.y) / TILE_SIZE))
+
+
 func find_path(from : Vector2, to : Vector2) -> PoolVector2Array:
 	var id_from = _pathfinding_graph.get_closest_point(from)
 	var id_to = _pathfinding_graph.get_closest_point(to)
-	return _pathfinding_graph.get_point_path(id_from, id_to)
+	var path = _pathfinding_graph.get_point_path(id_from, id_to)
+	return path
 
 
 func line_is_free(from : Vector2, to : Vector2) -> bool:
