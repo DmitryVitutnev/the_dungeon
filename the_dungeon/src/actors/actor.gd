@@ -5,6 +5,7 @@ class_name Actor
 signal action_idle(actor)
 signal action_move(actor, target_pos)
 signal action_attack(actor, target_actor, damage)
+signal action_shoot(actor, target_actor, damage)
 
 signal death(actor)
 signal stats_changed(actor)

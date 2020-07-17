@@ -6,6 +6,7 @@ var _slots := {}
 
 
 onready var slots := $Slots
+onready var impaled := $Impaled
 
 
 func _ready() -> void:
@@ -29,10 +30,10 @@ func free_slot(slot : String) -> void:
 
 
 func set_alive() -> void:
-	slots.rotation = 0.0
-	slots.self_modulate = Color(1, 1, 1, 1)
+	rotation = 0.0
+	self_modulate = Color(1, 1, 1, 1)
 
 
 func set_dead() -> void:
-	slots.rotation = randf() * 2 * PI
-	slots.modulate = Color(1, 1, 1, 0.5)
+	rotation = randf() * 2 * PI
+	modulate = Color(1, 1, 1, 0.5)

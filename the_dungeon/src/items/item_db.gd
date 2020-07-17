@@ -4,6 +4,10 @@ const STATS_PATH := "res://assets/items/stats/"
 const MODIFIERS_PATH := "res://assets/items/modifiers/"
 const UNIQUE_STATS_PATH := "res://assets/items/unique_stats/"
 
+enum Type {
+	MELEE, RANGED
+}
+
 enum Rarity {
 	GRAY, WHITE, BLUE, YELLOW, RED, GREEN
 }
@@ -34,7 +38,7 @@ func _ready() -> void:
 	dir.list_dir_begin()
 	var file_name = dir.get_next()
 	while file_name != "":
-		if !file_name.begins_with("."):
+		if !file_name.begins_with(".") and !dir.current_is_dir():
 			var stats = load(STATS_PATH + file_name)
 			_stats.append(stats)
 			if stats.slot == "MAIN_HAND":

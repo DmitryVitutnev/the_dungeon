@@ -25,3 +25,5 @@ position = Vector2( 0, 12 )
 
 [node name="OFF_HAND" type="Sprite" parent="Slots"]
 position = Vector2( 12, -2 )
+
+[node name="Impaled" type="Node2D" parent="."]

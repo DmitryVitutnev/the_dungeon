@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/dagger.png-0e038320331e5a5a165108b6cad1acfc.stex"
+path="res://.import/shortbow_icon.png-95a3f060206312cb3e4adcd8bf68f958.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://src/items/dagger.png"
-dest_files=[ "res://.import/dagger.png-0e038320331e5a5a165108b6cad1acfc.stex" ]
+source_file="res://assets/items/icons/shortbow_icon.png"
+dest_files=[ "res://.import/shortbow_icon.png-95a3f060206312cb3e4adcd8bf68f958.stex" ]
 
 [params]
 

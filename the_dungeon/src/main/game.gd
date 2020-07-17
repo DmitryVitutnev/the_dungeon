@@ -68,7 +68,7 @@ func _next_level() -> void:
 	var tween = Tween.new()
 	add_child(tween)
 	tween.interpolate_callback(_visibility_map, 0.01, "update_fog", _player.pos)
-	tween.interpolate_callback(tween, 0, "_queue_free")
+	tween.interpolate_callback(tween, 0, "queue_free")
 	tween.start()
 	_actor_controller.start_game()
 
@@ -163,13 +163,13 @@ func _input(event):
 		var items := _loot_map.get_items_by_pos(_player.pos)
 		for i in items:
 			var item := i as Item
-			if (_ui._inventory.pickup_item(item)):
+			if (_inventory.pickup_item(item)):
 				item.emit_signal("taken", item)
 		if _player.pos == _map.exit_pos and !_boss_alive:
 			_next_level()
 		return
 	if event.is_action_pressed("inv_open"):
-		_inventory.visible = !_ui._inventory.visible
+		_inventory.visible = _inventory.visible
 		return
 	if _inventory.visible:
 		_inventory.handle_input(event)

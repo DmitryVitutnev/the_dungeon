@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/sword.png-e2d15bca68d71157a1f9af4740884cb3.stex"
+path="res://.import/shortbow.png-da6253c9e40cb85eb8a6d3b9da0bdfc4.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://src/items/sword.png"
-dest_files=[ "res://.import/sword.png-e2d15bca68d71157a1f9af4740884cb3.stex" ]
+source_file="res://assets/items/textures/shortbow.png"
+dest_files=[ "res://.import/shortbow.png-da6253c9e40cb85eb8a6d3b9da0bdfc4.stex" ]
 
 [params]
 

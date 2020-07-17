@@ -12,7 +12,7 @@ func _process(delta):
 		if actor != null:
 			_is_my_turn = false
 			_movement_queue.clear()
-			emit_signal("action_attack", self, actor, _get_damage())
+			emit_signal("action_shoot", self, actor, _get_damage())
 		else:
 			_is_my_turn = false
 			var target_pos = _movement_queue[0]
