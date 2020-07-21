@@ -1,17 +1,17 @@
-[gd_resource type="Resource" load_steps=4 format=2]
+[gd_resource type="Resource" load_steps=5 format=2]
 
-[ext_resource path="res://src/items/item_stats.gd" type="Script" id=1]
+[ext_resource path="res://src/items/resources/ranged_weapon_item_res.gd" type="Script" id=1]
 [ext_resource path="res://assets/items/icons/shortbow_icon.png" type="Texture" id=2]
 [ext_resource path="res://assets/items/textures/shortbow.png" type="Texture" id=3]
+[ext_resource path="res://assets/items/projectiles/arrow_projectile.tscn" type="PackedScene" id=4]
 
 [resource]
 script = ExtResource( 1 )
 name = "shortbow"
 value = 0
-damage = "5"
-armor = 0
-max_health = 0
-speed = 0
-slot = "MAIN_HAND"
 icon = ExtResource( 2 )
+slot = "MAIN_HAND"
 texture = ExtResource( 3 )
+damage = "1d4"
+attack_cost = 8
+projectile_scene = ExtResource( 4 )

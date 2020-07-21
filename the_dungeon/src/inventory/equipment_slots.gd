@@ -27,6 +27,8 @@ func _process(delta) -> void:
 
 
 func insert_item(item : ItemInInventory) -> bool:
+	if !(item.item_info is EquipableItem):
+		return false
 	var item_pos = item.rect_global_position + item.rect_size / 2
 	var slot = _get_slot_under_pos(item_pos)
 	if slot == null:

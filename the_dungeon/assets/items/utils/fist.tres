@@ -1,0 +1,11 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://src/items/resources/melee_weapon_item_res.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+name = "fist"
+value = 0
+slot = "MAIN_HAND"
+damage = "1"
+attack_cost = 6

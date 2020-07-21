@@ -1,6 +1,6 @@
 [gd_resource type="Resource" load_steps=4 format=2]
 
-[ext_resource path="res://src/items/item_stats.gd" type="Script" id=1]
+[ext_resource path="res://src/items/resources/melee_weapon_item_res.gd" type="Script" id=1]
 [ext_resource path="res://assets/items/textures/axe.png" type="Texture" id=2]
 [ext_resource path="res://assets/items/icons/axe_icon.png" type="Texture" id=3]
 
@@ -8,10 +8,8 @@
 script = ExtResource( 1 )
 name = "axe"
 value = 0
-damage = "1d4+1"
-armor = 0
-max_health = 0
-speed = 0
-slot = "MAIN_HAND"
 icon = ExtResource( 3 )
+slot = "MAIN_HAND"
 texture = ExtResource( 2 )
+damage = "1d4+1"
+attack_cost = 6

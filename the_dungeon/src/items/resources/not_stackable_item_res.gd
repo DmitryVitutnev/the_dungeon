@@ -1,0 +1,2 @@
+extends ItemRes
+class_name NotStackableItemRes

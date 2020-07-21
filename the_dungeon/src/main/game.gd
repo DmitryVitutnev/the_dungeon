@@ -169,7 +169,7 @@ func _input(event):
 			_next_level()
 		return
 	if event.is_action_pressed("inv_open"):
-		_inventory.visible = _inventory.visible
+		_inventory.visible = !_inventory.visible
 		return
 	if _inventory.visible:
 		_inventory.handle_input(event)

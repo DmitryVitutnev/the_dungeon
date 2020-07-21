@@ -37,7 +37,5 @@ func _update_text() -> void:
 		new_text += "armor : " + str(_item.armor) + "\n"
 	if _item.speed != 0:
 		new_text += "speed : " + str(_item.speed) + "\n"
-	if _item.max_health != 0:
-		new_text += "max health : " + str(_item.max_health) + "\n"
 		
 	stats_text.text = new_text

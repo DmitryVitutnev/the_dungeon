@@ -1,0 +1,2 @@
+extends WeaponItemRes
+class_name MeleeWeaponItemRes

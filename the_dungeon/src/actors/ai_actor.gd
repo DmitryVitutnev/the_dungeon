@@ -40,20 +40,27 @@ func _look_for_player() -> void:
 func _chase_player() -> void:
 	var path := _map.find_path(pos, _last_seen_player_pos)
 	if path.size() > 2:
-		if _actor_list.get_alive_actor_by_pos(path[1]) == null:
+		if _weapon is RangedWeaponItem and _last_seen_player_pos == _actor_list.player.pos and _map.line_is_free(pos, _last_seen_player_pos):
+			_shoot_player()
+		elif _actor_list.get_alive_actor_by_pos(path[1]) == null:
 			var move_dir := (path[1] - pos) as Vector2
-			emit_signal("action_move", self, pos + move_dir)
+			emit_signal("action_move", self, MOVEMENT_COST, pos + move_dir)
 		else:
-			emit_signal("action_idle", self)
+			emit_signal("action_idle", self, IDLE_COST)
 	elif path.size() == 2:
 		if _actor_list.player.pos == path[1]:
-			emit_signal("action_attack", self, _actor_list.player, _get_damage())
+			emit_signal("action_attack", self, _weapon.attack_cost, _actor_list.player, _get_damage())
 		else:
 			var move_dir := (path[1] - pos) as Vector2
 			_saw_player = false
-			emit_signal("action_move", self, pos + move_dir)
+			emit_signal("action_move", self, MOVEMENT_COST, pos + move_dir)
 	else:
-		emit_signal("action_idle", self)
+		emit_signal("action_idle", self, IDLE_COST)
+
+
+func _shoot_player() -> void:
+	var ranged = _weapon as RangedWeaponItem
+	emit_signal("action_shoot", self, ranged.attack_cost, _actor_list.player, _get_damage(), ranged.projectile_scene)
 
 
 func _wander() -> void:
@@ -62,8 +69,8 @@ func _wander() -> void:
 		if _map.is_free(pos + dir):
 			options.append(dir)
 	var move_dir := options[randi() % options.size()] as Vector2
-	emit_signal("action_move", self, pos + move_dir)
+	emit_signal("action_move", self, MOVEMENT_COST, pos + move_dir)
 
 
 func _idle() -> void:
-	emit_signal("action_idle", self)
+	emit_signal("action_idle", self, IDLE_COST)

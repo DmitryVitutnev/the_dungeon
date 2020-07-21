@@ -2,15 +2,6 @@ extends Node2D
 class_name ActorController
 
 
-const ACTION_IDLE_COST := 10
-const ACTION_MOVE_COST := 20
-const ACTION_ATTACK_COST := 20
-const ACTION_SHOOT_COST := 20
-
-# Temporal solution
-var projectile_prefab = load("res://assets/items/projectiles/arrow_projectile.tscn")
-
-
 var _map : Map
 var _visibility_map : VisibilityMap
 
@@ -57,7 +48,6 @@ func clear() -> void:
 	_turn_manager.clear()
 	_actor_list.clear_enemies()
 	ActorMover.clear()
-	ActorAttacker.clear()
 
 
 func _add_actor(actor : Actor) -> void:
@@ -78,23 +68,21 @@ func _remove_actor(actor : Actor) -> void:
 	actor.get_parent().remove_child(actor)
 
 
-func _actor_idle(actor : Actor) -> void:
-	_next_turn(ACTION_IDLE_COST)
+func _actor_idle(actor : Actor, action_cost : int) -> void:
+	_next_turn(action_cost)
 
 
-func _actor_move(actor : Actor, target_pos : Vector2) -> void:
+func _actor_move(actor : Actor, action_cost : int, target_pos : Vector2) -> void:
 	ActorMover.move_actor(actor, target_pos)
 	actor.pos = target_pos
 	
 	if _actor_list.player == actor:
 		_visibility_map.call_deferred("update_fog", _actor_list.player.pos)
 	
-	_next_turn(ACTION_MOVE_COST)
+	_next_turn(action_cost)
 
 
-func _actor_attack(actor : Actor, target_actor : Actor, damage : String) -> void:
-	#target_actor.take_damage(max(0, Roll.from_string(damage) - target_actor.armor))
-	#ActorAttacker.attack_actor(actor, target_actor.pos)
+func _actor_attack(actor : Actor, action_cost : int, target_actor : Actor, damage : String) -> void:
 	var forward_duration := 0.05
 	var back_duration := 0.2
 	var tween = Tween.new()
@@ -106,15 +94,15 @@ func _actor_attack(actor : Actor, target_actor : Actor, damage : String) -> void
 	tween.interpolate_property(actor, "position",
 		target_actor.pos * _map.TILE_SIZE, actor.pos * _map.TILE_SIZE, back_duration,
 		Tween.TRANS_LINEAR, Tween.EASE_IN_OUT, forward_duration)
-	tween.interpolate_callback(self, forward_duration + back_duration, "_next_turn", ACTION_ATTACK_COST)
+	tween.interpolate_callback(self, forward_duration + back_duration, "_next_turn", action_cost)
 	tween.interpolate_callback(tween, forward_duration + back_duration, "queue_free")
 	tween.start()
 
 
-func _actor_shoot(actor : Actor, target_actor : Actor, damage : String) -> void:
+func _actor_shoot(actor : Actor, action_cost : int, target_actor : Actor, damage : String, projectile_prefab : PackedScene) -> void:
 	var target_point = Vector2(rand_range(-4, 4), rand_range(-4, 4))
 	var start_point = (actor.pos - target_actor.pos) * _map.TILE_SIZE + Vector2(rand_range(-4, 4), rand_range(-4, 4))
-	var flight_duration = (target_point - start_point).length() * 0.005
+	var flight_duration = (target_point - start_point).length() * 0.001
 	var projectile = projectile_prefab.instance()
 	target_actor._appearance.impaled.add_child(projectile)
 	projectile.rotation = (target_point - start_point).angle()
@@ -125,7 +113,7 @@ func _actor_shoot(actor : Actor, target_actor : Actor, damage : String) -> void:
 		Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	tween.interpolate_callback(target_actor, flight_duration, "take_damage", 
 	max(0, Roll.from_string(damage) - target_actor.armor))
-	tween.interpolate_callback(self, flight_duration, "_next_turn", ACTION_SHOOT_COST)
+	tween.interpolate_callback(self, flight_duration, "_next_turn", action_cost)
 	tween.interpolate_callback(tween, flight_duration, "queue_free")
 	tween.start()
 

@@ -1,5 +1,5 @@
 extends Node2D
-class_name Item
+class_name ItemOld
 
 
 # TODO Temporal solution. I should think about this

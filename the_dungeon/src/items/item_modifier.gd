@@ -1,5 +1,5 @@
 extends Resource
-class_name ItemModifier
+class_name ItemModifierRes
 
 
 export var prefix_name : String

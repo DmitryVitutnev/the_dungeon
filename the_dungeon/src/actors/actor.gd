@@ -2,16 +2,20 @@ extends Node2D
 class_name Actor
 
 
-signal action_idle(actor)
-signal action_move(actor, target_pos)
-signal action_attack(actor, target_actor, damage)
-signal action_shoot(actor, target_actor, damage)
+signal action_idle(actor, action_cost)
+signal action_move(actor, action_cost, target_pos)
+signal action_attack(actor, action_cost, target_actor, damage)
+signal action_shoot(actor, action_cost, target_actor, damage, projectile_scene)
 
 signal death(actor)
 signal stats_changed(actor)
 signal pos_changed(actor)
 signal item_picked_up(item)
 signal item_dropped(item, pos)
+
+
+const MOVEMENT_COST = 6
+const IDLE_COST = 1
 
 
 export var starting_stats : Resource
@@ -34,6 +38,8 @@ var _map : Map
 var _actor_list : ActorList
 var _equipped_items := {}
 var _items := []
+var _weapon : WeaponItem
+var _no_weapon : WeaponItem
 
 
 onready var _stats := $Stats as ActorStats
@@ -45,6 +51,9 @@ func initialize(map : Map, actor_list : ActorList) -> void:
 	_stats.initialize(starting_stats)
 	_map = map
 	_actor_list = actor_list
+	
+	_no_weapon = ItemDB.generate_fist_weapon()
+	_weapon = _no_weapon
 	
 	health = _get_max_health()
 
@@ -75,15 +84,19 @@ func drop_item(item : Item) -> void:
 	emit_signal("item_dropped", item, pos)
 
 
-func equip_item(item : Item) -> void:
+func equip_item(item : EquipableItem) -> void:
 	_equipped_items[item.slot] = item
+	if item.slot == "MAIN_HAND":
+		_weapon = item as WeaponItem
 	_appearance.set_item_in_slot(item, item.slot)
 	item.connect("taken", self, "unequip_item")
 	emit_signal("stats_changed", self)
 
 
-func unequip_item(item : Item) -> void:
+func unequip_item(item : EquipableItem) -> void:
 	_equipped_items.erase(item.slot)
+	if item == _weapon:
+		_weapon = _no_weapon
 	_appearance.free_slot(item.slot)
 	item.disconnect("taken", self, "unequip_item")
 	emit_signal("stats_changed", self)
@@ -120,9 +133,9 @@ func _get_health() -> int:
 
 func _get_max_health() -> int:
 	var result := _stats.max_health
-	for i in _equipped_items.values():
-		var item := i as Item
-		result += item.max_health
+	#for i in _equipped_items.values():
+	#	var item := i as Item
+	#	result += item.max_health
 	if result < 0:
 		result = 0
 	return result

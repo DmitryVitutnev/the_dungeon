@@ -22,6 +22,7 @@ var outline_materials := {
 
 #Temporal solution
 var starting_weapon_stats := load("res://assets/items/stats/club.tres")
+var fist_weapon_stats := load("res://assets/items/utils/fist.tres")
 
 
 var _stats := []
@@ -66,21 +67,30 @@ func _ready() -> void:
 		file_name = dir.get_next()
 
 
-func generate_item() -> Item:
+func generate_item() -> EquipableItem:
 	return _generate_item_from_list(_stats)
 
 
-func generate_weapon() -> Item:
+func generate_weapon() -> EquipableItem:
 	return _generate_item_from_list(_weapon_stats)
 
 
-func generate_armor() -> Item:
+func generate_armor() -> EquipableItem:
 	return _generate_item_from_list(_armor_stats)
 
 
-func generate_starting_weapon() -> Item:
-	var item = Item.new()
-	item._stats = starting_weapon_stats
+func generate_starting_weapon() -> MeleeWeaponItem:
+	var item = MeleeWeaponItem.new()
+	item.initialize(starting_weapon_stats)
+	item.rarity = Rarity.WHITE
+	add_child(item)
+	_items.append(item)
+	return item
+
+
+func generate_fist_weapon() -> MeleeWeaponItem:
+	var item = MeleeWeaponItem.new()
+	item.initialize(fist_weapon_stats)
 	item.rarity = Rarity.WHITE
 	add_child(item)
 	_items.append(item)
@@ -99,15 +109,22 @@ func generate_boss_equipment() -> Array:
 	return result
 
 
-func _generate_item_from_list(list : Array) -> Item:
-	var item := Item.new()
-	item._stats = list[randi() % list.size()]
+func _generate_item_from_list(list : Array) -> EquipableItem:
+	var stats = list[randi() % list.size()]
+	var item : EquipableItem
+	if stats is MeleeWeaponItemRes:
+		item = MeleeWeaponItem.new()
+	elif stats is RangedWeaponItemRes:
+		item = RangedWeaponItem.new()
+	elif stats is ArmorItemRes:
+		item = ArmorItem.new()
+	item.initialize(stats)
 	item.rarity = Rarity.WHITE
 	if Roll.d3(1) == 3:
-		item._modifiers.append(_modifiers[randi() % _modifiers.size()])
+		item.modifiers.append(_modifiers[randi() % _modifiers.size()])
 		item.rarity = Rarity.BLUE
 		if Roll.d3(1) == 3:
-			item._modifiers.append(_modifiers[randi() % _modifiers.size()])
+			item.modifiers.append(_modifiers[randi() % _modifiers.size()])
 			item.rarity = Rarity.YELLOW
 			if Roll.d3(1) == 3:
 				item.ancient = true

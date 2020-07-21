@@ -41,12 +41,18 @@ func find_path(from : Vector2, to : Vector2) -> PoolVector2Array:
 
 
 func line_is_free(from : Vector2, to : Vector2) -> bool:
-	var steps_num := max(abs(to.x - from.x), abs(to.y - from.y))
-	for i in range(steps_num):
-		var point = from * (1 - i / steps_num) + to * i / steps_num
-		if !is_free(Vector2(floor(point.x), floor(point.y))):
-			return false
-	return true
+	var space_state = get_world_2d().direct_space_state
+	var from_point := Vector2(from.x, from.y) * TILE_SIZE + Vector2(TILE_SIZE/2, TILE_SIZE/2)
+	var to_point := Vector2(to.x, to.y) * TILE_SIZE + Vector2(TILE_SIZE/2, TILE_SIZE/2)
+	var occlusion = space_state.intersect_ray(from_point, to_point)
+	return !occlusion
+	
+	#var steps_num := max(abs(to.x - from.x), abs(to.y - from.y))
+	#for i in range(steps_num):
+	#	var point = from * (1 - i / steps_num) + to * i / steps_num
+	#	if !is_free(Vector2(floor(point.x), floor(point.y))):
+	#		return false
+	#return true
 
 
 func build_level(map_size : Vector2, room_number : int) -> void:
