@@ -13,5 +13,5 @@ icon = ExtResource( 2 )
 slot = "MAIN_HAND"
 texture = ExtResource( 3 )
 damage = "1d4"
-attack_cost = 8
+attack_cost = 12
 projectile_scene = ExtResource( 4 )

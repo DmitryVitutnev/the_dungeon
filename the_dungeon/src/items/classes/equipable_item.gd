@@ -1,7 +1,7 @@
 extends NotStackableItem
 class_name EquipableItem
 
-var slot : String setget ,_get_slot
+var slot : int setget ,_get_slot
 var texture : Texture setget ,_get_texture
 var rarity : int
 var ancient : bool
@@ -19,7 +19,7 @@ func initialize(resource : Resource) -> void:
 	texture = res.texture
 
 
-func _get_slot() -> String:
+func _get_slot() -> int:
 	return slot
 
 
@@ -31,7 +31,8 @@ func _get_damage() -> String:
 	var result := ""
 	for m in modifiers:
 		var mod := m as ItemModifierRes
-		result += "+" + mod.damage
+		if mod.damage != "":
+			result += "+" + mod.damage
 	if ancient:
 		result = result + result
 	return result

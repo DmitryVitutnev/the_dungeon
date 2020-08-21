@@ -6,6 +6,6 @@
 script = ExtResource( 1 )
 name = "fist"
 value = 0
-slot = "MAIN_HAND"
+slot = 0
 damage = "1"
 attack_cost = 6

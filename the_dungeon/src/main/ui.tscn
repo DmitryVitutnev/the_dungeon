@@ -1,0 +1,204 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://src/items/loot_info.gd" type="Script" id=1]
+[ext_resource path="res://src/main/ui.gd" type="Script" id=2]
+[ext_resource path="res://src/utils/fullscreen_banner.gd" type="Script" id=3]
+
+[node name="UI" type="Control"]
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TopBar" type="Control" parent="."]
+margin_right = 640.0
+margin_bottom = 32.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BlackLine" type="ColorRect" parent="TopBar"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0.384314 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Health" type="Label" parent="TopBar"]
+margin_left = 128.0
+margin_right = 256.0
+margin_bottom = 32.0
+text = "Health: ERROR"
+align = 1
+valign = 1
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Level" type="Label" parent="TopBar"]
+margin_right = 128.0
+margin_bottom = 32.0
+text = "LEVEL: ERROR"
+align = 1
+valign = 1
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Damage" type="Label" parent="TopBar"]
+margin_left = 256.0
+margin_right = 384.0
+margin_bottom = 32.0
+text = "DAMAGE: ERROR"
+align = 1
+valign = 1
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Armor" type="Label" parent="TopBar"]
+margin_left = 384.0
+margin_right = 512.0
+margin_bottom = 32.0
+text = "Armor: ERROR"
+align = 1
+valign = 1
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Speed" type="Label" parent="TopBar"]
+margin_left = 512.0
+margin_right = 643.0
+margin_bottom = 32.0
+text = "SPEED: ERROR"
+align = 1
+valign = 1
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LootInfo" type="Control" parent="."]
+margin_left = 416.0
+margin_top = 64.0
+margin_right = 640.0
+margin_bottom = 320.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Background" type="ColorRect" parent="LootInfo"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0.384314 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ScrollContainer" type="ScrollContainer" parent="LootInfo"]
+margin_right = 224.0
+margin_bottom = 256.0
+scroll_horizontal_enabled = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="LootInfo/ScrollContainer"]
+custom_constants/separation = 20
+
+[node name="GreetingsScreen" type="ColorRect" parent="."]
+visible = false
+margin_right = 640.0
+margin_bottom = 384.0
+color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="GreetingsScreen"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "Hello there!
+This game is hard.
+Sorry.
+Good luck!
+
+You are in the dungeon.
+Your goal is to reach the last level and defeat the evil boss.
+You are nearly naked.
+So you should gather some equipment before rushing in.
+Enemies wear equipment.
+You know what to do...
+
+MOVE / ATTACK - Mouse click
+PICK UP / USE LADDER - ENTER or SPACE
+OPEN INVENTORY - I or E
+RESTART - BACKSPACE
+
+PRESS ENTER TO START"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Tween" type="Tween" parent="GreetingsScreen"]
+
+[node name="WinScreen" type="ColorRect" parent="."]
+visible = false
+margin_right = 640.0
+margin_bottom = 384.0
+color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="WinScreen"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "You Won!
+Congratulations!!!
+
+Press BACKSPACE to start new game"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Tween" type="Tween" parent="WinScreen"]
+
+[node name="DefeatScreen" type="ColorRect" parent="."]
+visible = false
+modulate = Color( 1, 1, 1, 0 )
+margin_right = 640.0
+margin_bottom = 384.0
+color = Color( 0, 0, 0, 1 )
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="DefeatScreen"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "You Died
+Try to be more carefull next time
+
+HINT: Most enemies are slower than you. Try using that as an advantage.
+
+Press BACKSPACE to restart"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Tween" type="Tween" parent="DefeatScreen"]

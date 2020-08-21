@@ -42,7 +42,7 @@ func _ready() -> void:
 		if !file_name.begins_with(".") and !dir.current_is_dir():
 			var stats = load(STATS_PATH + file_name)
 			_stats.append(stats)
-			if stats.slot == "MAIN_HAND":
+			if stats.slot == Enum.EquipmentSlot.MAIN_HAND or stats.slot == Enum.EquipmentSlot.TWO_HANDS:
 				_weapon_stats.append(stats)
 			else:
 				_armor_stats.append(stats)
@@ -100,7 +100,11 @@ func generate_fist_weapon() -> MeleeWeaponItem:
 func generate_boss_equipment() -> Array:
 	var result := []
 	for stat in _unique_item_stats:
-		var item = Item.new()
+		var item
+		if stat is MeleeWeaponItemRes:
+			item = MeleeWeaponItem.new()
+		else:
+			item = ArmorItem.new()
 		item._stats = stat
 		item.rarity = Rarity.GREEN
 		add_child(item)
@@ -110,6 +114,7 @@ func generate_boss_equipment() -> Array:
 
 
 func _generate_item_from_list(list : Array) -> EquipableItem:
+	return generate_starting_weapon()
 	var stats = list[randi() % list.size()]
 	var item : EquipableItem
 	if stats is MeleeWeaponItemRes:

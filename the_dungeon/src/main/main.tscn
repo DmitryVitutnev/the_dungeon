@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://src/main/map.gd" type="Script" id=1]
 [ext_resource path="res://assets/sprites/tiles/exit.png" type="Texture" id=2]
@@ -9,15 +9,13 @@
 [ext_resource path="res://src/main/game.gd" type="Script" id=7]
 [ext_resource path="res://src/main/turn_manager.gd" type="Script" id=8]
 [ext_resource path="res://src/main/actor_controller.gd" type="Script" id=9]
+[ext_resource path="res://src/main/ui.tscn" type="PackedScene" id=10]
 [ext_resource path="res://src/main/actor_list.gd" type="Script" id=12]
 [ext_resource path="res://src/inventory/inventory.tscn" type="PackedScene" id=13]
 [ext_resource path="res://assets/sprites/tiles/black.png" type="Texture" id=14]
 [ext_resource path="res://src/main/visibility_map.gd" type="Script" id=15]
-[ext_resource path="res://src/main/ui.gd" type="Script" id=16]
 [ext_resource path="res://src/items/loot_map.gd" type="Script" id=17]
 [ext_resource path="res://assets/sprites/tiles/loot_bag.png" type="Texture" id=18]
-[ext_resource path="res://src/items/loot_info.gd" type="Script" id=19]
-[ext_resource path="res://src/utils/fullscreen_banner.gd" type="Script" id=20]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( 0, 0, 32, 0, 32, 32, 0, 32 )
@@ -192,213 +190,9 @@ tile_set = SubResource( 6 )
 cell_size = Vector2( 32, 32 )
 format = 1
 
-[node name="UI" type="CanvasLayer" parent="."]
-script = ExtResource( 16 )
+[node name="Canvas" type="CanvasLayer" parent="."]
 
-[node name="TopBar" type="Control" parent="UI"]
-margin_right = 640.0
-margin_bottom = 32.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="UI" parent="Canvas" instance=ExtResource( 10 )]
 
-[node name="BlackLine" type="ColorRect" parent="UI/TopBar"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-color = Color( 0, 0, 0, 0.384314 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Health" type="Label" parent="UI/TopBar"]
-margin_left = 128.0
-margin_right = 256.0
-margin_bottom = 32.0
-text = "Health: ERROR"
-align = 1
-valign = 1
-uppercase = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Level" type="Label" parent="UI/TopBar"]
-margin_right = 128.0
-margin_bottom = 32.0
-text = "LEVEL: ERROR"
-align = 1
-valign = 1
-uppercase = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Damage" type="Label" parent="UI/TopBar"]
-margin_left = 256.0
-margin_right = 384.0
-margin_bottom = 32.0
-text = "DAMAGE: ERROR"
-align = 1
-valign = 1
-uppercase = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Armor" type="Label" parent="UI/TopBar"]
-margin_left = 384.0
-margin_right = 512.0
-margin_bottom = 32.0
-text = "Armor: ERROR"
-align = 1
-valign = 1
-uppercase = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Speed" type="Label" parent="UI/TopBar"]
-margin_left = 512.0
-margin_right = 643.0
-margin_bottom = 32.0
-text = "SPEED: ERROR"
-align = 1
-valign = 1
-uppercase = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="LootInfo" type="Control" parent="UI"]
-margin_left = 416.0
-margin_top = 64.0
-margin_right = 640.0
-margin_bottom = 320.0
-script = ExtResource( 19 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Background" type="ColorRect" parent="UI/LootInfo"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-color = Color( 0, 0, 0, 0.384314 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Text" type="RichTextLabel" parent="UI/LootInfo"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 20.0
-margin_top = 40.0
-margin_right = -20.0
-margin_bottom = -20.0
-bbcode_enabled = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="UI/LootInfo"]
-anchor_right = 1.0
-margin_left = 20.0
-margin_top = 20.0
-margin_right = -32.0
-margin_bottom = 46.0
-text = "Press ENTER to pick up:"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Inventory" parent="UI" instance=ExtResource( 13 )]
+[node name="Inventory" parent="Canvas" instance=ExtResource( 13 )]
 visible = false
-
-[node name="GreetingsScreen" type="ColorRect" parent="UI"]
-visible = false
-margin_right = 640.0
-margin_bottom = 384.0
-color = Color( 0, 0, 0, 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="UI/GreetingsScreen"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-text = "Hello there!
-This game is hard.
-Sorry.
-Good luck!
-
-You are in the dungeon.
-Your goal is to reach the last level and defeat the evil boss.
-You are nearly naked.
-So you should gather some equipment before rushing in.
-Enemies wear equipment.
-You know what to do...
-
-MOVE / ATTACK - WASD or ARROW KEYS
-PICK UP / USE LADDER - ENTER or SPACE
-OPEN INVENTORY - I or E
-RESTART - BACKSPACE
-
-PRESS ENTER TO START"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Tween" type="Tween" parent="UI/GreetingsScreen"]
-
-[node name="WinScreen" type="ColorRect" parent="UI"]
-visible = false
-margin_right = 640.0
-margin_bottom = 384.0
-color = Color( 0, 0, 0, 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="UI/WinScreen"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-text = "You Won!
-Congratulations!!!
-
-Press BACKSPACE to start new game"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Tween" type="Tween" parent="UI/WinScreen"]
-
-[node name="DefeatScreen" type="ColorRect" parent="UI"]
-visible = false
-modulate = Color( 1, 1, 1, 0 )
-margin_right = 640.0
-margin_bottom = 384.0
-color = Color( 0, 0, 0, 1 )
-script = ExtResource( 20 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="UI/DefeatScreen"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-text = "You Died
-Try to be more carefull next time
-
-HINT: Most enemies are slower than you. Try using that as an advantage.
-
-Press BACKSPACE to restart"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Tween" type="Tween" parent="UI/DefeatScreen"]

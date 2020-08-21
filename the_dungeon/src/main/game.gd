@@ -25,9 +25,9 @@ onready var _map := $Map as Map
 onready var _visibility_map := $VisibilityMap as VisibilityMap
 onready var _loot_map := $LootMap as LootMap
 onready var _actor_controller := $ActorController as ActorController
-onready var _ui := $UI as UI
-onready var _inventory := $UI/Inventory as Inventory
-onready var _greetings := $UI/GreetingsScreen
+onready var _ui := $Canvas/UI as UI
+onready var _inventory := $Canvas/Inventory as Inventory
+onready var _greetings := $Canvas/UI/GreetingsScreen
 onready var _for_player := $ForPlayer
 
 
@@ -41,7 +41,8 @@ func _start_game() -> void:
 	randomize()
 	_player = _create_player()
 	
-	_ui.initialize(_player, _loot_map)
+	_ui.initialize(_player, _loot_map, _inventory)
+	_inventory.initialize(_player)
 	_greetings.visible = true
 	_game_just_started = true
 	
@@ -163,8 +164,7 @@ func _input(event):
 		var items := _loot_map.get_items_by_pos(_player.pos)
 		for i in items:
 			var item := i as Item
-			if (_inventory.pickup_item(item)):
-				item.emit_signal("taken", item)
+			_inventory.pickup_item(item)
 		if _player.pos == _map.exit_pos and !_boss_alive:
 			_next_level()
 		return

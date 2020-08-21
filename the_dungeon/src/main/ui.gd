@@ -1,4 +1,4 @@
-extends CanvasLayer
+extends Control
 class_name UI
 
 
@@ -10,19 +10,14 @@ onready var _speed := $TopBar/Speed as Label
 onready var _loot_info := $LootInfo as LootInfo
 onready var _win_screen := $WinScreen
 onready var _defeat_screen := $DefeatScreen
-onready var _inventory := $Inventory
 
 
-func initialize(player : Actor, loot_map : LootMap):
-	_loot_info.initialize(loot_map)
+func initialize(player : Actor, loot_map : LootMap, inventory : Inventory):
+	_loot_info.initialize(loot_map, inventory)
 	_win_screen.visible = false
 	_defeat_screen.visible = false
-	_inventory.visible = false
 	
-	_inventory.connect("item_equipped", player, "equip_item")
-	_inventory.connect("item_unequipped", player, "unequip_item")
-	_inventory.connect("item_picked_up", player, "pickup_item")
-	_inventory.connect("item_dropped", player, "drop_item")
+	
 	player.connect("stats_changed", self, "_player_stats_changed")
 	player.connect("pos_changed", self, "_player_pos_changed")
 	player.connect("item_dropped", self, "_player_item_dropped")

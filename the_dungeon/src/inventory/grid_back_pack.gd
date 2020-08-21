@@ -8,8 +8,6 @@ var _cell_size := 16
 var _grid_width := 0
 var _grid_height := 0
 
-onready var _item_info := get_parent().get_parent().get_node("ItemInfo") as ItemInfo
-
 
 func _ready() -> void:
 	var s = _get_grid_size(self)
@@ -20,19 +18,6 @@ func _ready() -> void:
 		_grid.append([])
 		for y in range(_grid_height):
 			_grid[x].append(false)
-	
-	_item_info.visible = false
-
-
-func _process(delta) -> void:
-	var cursor_pos := get_global_mouse_position()
-	var item = _get_item_under_pos(cursor_pos) as ItemInInventory
-	if item != null:
-		_item_info.update_item(item.item_info)
-		_item_info.set_global_position(cursor_pos)
-		_item_info.visible = true
-	else:
-		_item_info.visible = false
 
 
 func insert_item(item : ItemInInventory):

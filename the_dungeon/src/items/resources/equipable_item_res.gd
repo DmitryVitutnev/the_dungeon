@@ -1,5 +1,5 @@
 extends NotStackableItemRes
 class_name EquipableItemRes
 
-export var slot := "NO_SLOT"
+export(Enum.EquipmentSlot) var slot : int
 export var texture : Texture

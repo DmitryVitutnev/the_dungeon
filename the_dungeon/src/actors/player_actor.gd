@@ -16,7 +16,7 @@ func _process(delta):
 		else:
 			if _weapon is RangedWeaponItem:
 				var ranged = _weapon as RangedWeaponItem
-				for i in range(1, _movement_queue.size()):
+				for i in range(_movement_queue.size() - 1, 0, -1):
 					var target_actor = _actor_list.get_alive_actor_by_pos(_movement_queue[i])
 					if target_actor != null and _map.line_is_free(pos, _movement_queue[i]):
 						_movement_queue.clear()

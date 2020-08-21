@@ -2,7 +2,7 @@ extends Panel
 class_name ItemInfo
 
 
-var _item : Item
+var _item : EquipableItem
 
 
 onready var name_text := $Name
@@ -30,9 +30,12 @@ func _update_text() -> void:
 			name_text.bbcode_text = "[color=green]" + name_text.bbcode_text + "[/color]"
 	
 	var new_text := ""
-	new_text += "slot : " + _item.slot + "\n"
+	new_text += "slot : " + str(_item.slot) + "\n"
 	if _item.damage != "":
 		new_text += "damage : " + Roll.from_d_to_interval(_item.damage) + "\n"
+	if _item is WeaponItem:
+		var weapon = _item as WeaponItem
+		new_text += "attack cost : " + str(weapon.attack_cost) + "\n"
 	if _item.armor != 0:
 		new_text += "armor : " + str(_item.armor) + "\n"
 	if _item.speed != 0:

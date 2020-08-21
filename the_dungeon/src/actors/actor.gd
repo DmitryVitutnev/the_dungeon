@@ -77,6 +77,7 @@ func take_damage(damage : int) -> void:
 func pickup_item(item : Item) -> void:
 	_items.append(item)
 	emit_signal("item_picked_up", item)
+	item.emit_signal("taken")
 
 
 func drop_item(item : Item) -> void:
@@ -84,22 +85,34 @@ func drop_item(item : Item) -> void:
 	emit_signal("item_dropped", item, pos)
 
 
-func equip_item(item : EquipableItem) -> void:
+func equip_item(item : EquipableItem) -> bool:
+	if _equipped_items.keys().has(item.slot):
+		return false
+	if item.slot == Enum.EquipmentSlot.TWO_HANDS:
+		if _equipped_items.has(Enum.EquipmentSlot.MAIN_HAND) or _equipped_items.has(Enum.EquipmentSlot.OFF_HAND):
+			return false
+	if item.slot == Enum.EquipmentSlot.MAIN_HAND or item.slot == Enum.EquipmentSlot.OFF_HAND:
+		if _equipped_items.has(Enum.EquipmentSlot.TWO_HANDS):
+			return false
 	_equipped_items[item.slot] = item
-	if item.slot == "MAIN_HAND":
+	if item.slot == Enum.EquipmentSlot.MAIN_HAND:
 		_weapon = item as WeaponItem
 	_appearance.set_item_in_slot(item, item.slot)
 	item.connect("taken", self, "unequip_item")
 	emit_signal("stats_changed", self)
+	return true
 
 
-func unequip_item(item : EquipableItem) -> void:
+func unequip_item(item : EquipableItem) -> bool:
+	if !_equipped_items.has(item):
+		return false
 	_equipped_items.erase(item.slot)
 	if item == _weapon:
 		_weapon = _no_weapon
 	_appearance.free_slot(item.slot)
 	item.disconnect("taken", self, "unequip_item")
 	emit_signal("stats_changed", self)
+	return true
 
 
 func _set_pos(new_pos : Vector2) -> void:
@@ -144,7 +157,7 @@ func _get_max_health() -> int:
 func _get_damage() -> String:
 	var result := _stats.damage
 	for i in _equipped_items.values():
-		var item := i as Item
+		var item := i as EquipableItem
 		if item.damage != "":
 			result += "+" + item.damage
 	if result == "":
@@ -155,7 +168,7 @@ func _get_damage() -> String:
 func _get_armor() -> int:
 	var result := _stats.armor
 	for i in _equipped_items.values():
-		var item := i as Item
+		var item := i as EquipableItem
 		result += item.armor
 	if result < 0:
 		result = 0
@@ -165,7 +178,7 @@ func _get_armor() -> int:
 func _get_speed() -> int:
 	var result := _stats.speed
 	for i in _equipped_items.values():
-		var item := i as Item
+		var item := i as EquipableItem
 		result += item.speed
 	if result < 1:
 		result = 1

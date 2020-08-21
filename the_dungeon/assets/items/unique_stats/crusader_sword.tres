@@ -1,6 +1,6 @@
 [gd_resource type="Resource" load_steps=4 format=2]
 
-[ext_resource path="res://src/items/item_stats.gd" type="Script" id=1]
+[ext_resource path="res://src/items/resources/melee_weapon_item_res.gd" type="Script" id=1]
 [ext_resource path="res://assets/items/icons/crusader_sword_icon.png" type="Texture" id=2]
 [ext_resource path="res://assets/items/textures/crusader_sword.png" type="Texture" id=3]
 
@@ -8,10 +8,8 @@
 script = ExtResource( 1 )
 name = "Excalibur"
 value = 0
-damage = "2d2 + 6"
-armor = 0
-max_health = 0
-speed = 0
-slot = "MAIN_HAND"
 icon = ExtResource( 2 )
+slot = "MAIN_HAND"
 texture = ExtResource( 3 )
+damage = "4d3"
+attack_cost = 6

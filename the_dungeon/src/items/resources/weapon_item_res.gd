@@ -2,7 +2,7 @@ extends EquipableItemRes
 class_name WeaponItemRes
 
 
-const NORMAL_ATTACK_COST := 6
+const NORMAL_ATTACK_COST := 10
 
 
 export var damage := "0"

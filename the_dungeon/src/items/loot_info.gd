@@ -2,15 +2,21 @@ extends Control
 class_name LootInfo
 
 
+var line_scene = load("res://src/items/loot_info_line.tscn")
+
+
 var _loot_map : LootMap
+var _inventory : Inventory
 var _target_pos : Vector2
+var _lines := []
 
 
-onready var _text_box := $Text
+onready var _scroll_container := $ScrollContainer/VBoxContainer
 
 
-func initialize(loot_map : LootMap) -> void:
+func initialize(loot_map : LootMap, inventory : Inventory) -> void:
 	_loot_map = loot_map
+	_inventory = inventory
 	visible = false
 
 
@@ -19,23 +25,22 @@ func set_target_pos(pos : Vector2) -> void:
 
 
 func show_items() -> void:
+	for l in _lines:
+		l.queue_free()
+	_lines.clear()
 	var items := _loot_map.get_items_by_pos(_target_pos)
-	var text := ""
 	for i in items:
 		var item := i as Item
-		match item.rarity:
-			ItemDB.Rarity.WHITE:
-				text += "[color=white]" + item.full_name + "\n" + "[/color]"
-			ItemDB.Rarity.BLUE:
-				text += "[color=blue]" + item.full_name + "\n" + "[/color]"
-			ItemDB.Rarity.YELLOW:
-				text += "[color=yellow]" + item.full_name + "\n" + "[/color]"
-			ItemDB.Rarity.RED:
-				text += "[color=red]" + item.full_name + "\n" + "[/color]"
-			ItemDB.Rarity.GREEN:
-				text += "[color=green]" + item.full_name + "\n" + "[/color]"
-	_text_box.bbcode_text = text
-	if text == "":
+		var line := line_scene.instance() as LootInfoLine
+		_scroll_container.add_child(line)
+		line.initialize(item)
+		line.connect("pick_up", self, "_pick_up_item")
+		_lines.append(line)
+	if items.empty():
 		visible = false
 	else:
 		visible = true
+
+
+func _pick_up_item(item : Item) -> void:
+	_inventory.pickup_item(item)

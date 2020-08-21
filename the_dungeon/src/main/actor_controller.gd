@@ -73,6 +73,10 @@ func _actor_idle(actor : Actor, action_cost : int) -> void:
 
 
 func _actor_move(actor : Actor, action_cost : int, target_pos : Vector2) -> void:
+	var other_actor := _actor_list.get_alive_actor_by_pos(target_pos) as Actor
+	if other_actor != null:
+		ActorMover.move_actor(other_actor, actor.pos)
+		other_actor.pos = actor.pos
 	ActorMover.move_actor(actor, target_pos)
 	actor.pos = target_pos
 	

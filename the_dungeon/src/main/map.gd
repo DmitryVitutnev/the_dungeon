@@ -41,11 +41,18 @@ func find_path(from : Vector2, to : Vector2) -> PoolVector2Array:
 
 
 func line_is_free(from : Vector2, to : Vector2) -> bool:
-	var space_state = get_world_2d().direct_space_state
-	var from_point := Vector2(from.x, from.y) * TILE_SIZE + Vector2(TILE_SIZE/2, TILE_SIZE/2)
-	var to_point := Vector2(to.x, to.y) * TILE_SIZE + Vector2(TILE_SIZE/2, TILE_SIZE/2)
-	var occlusion = space_state.intersect_ray(from_point, to_point)
-	return !occlusion
+	if abs(from.x - to.x) == abs(from.y - to.y):
+		for i in range(abs(from.x - to.x) + 1):
+			var point := from + i * Vector2(sign(to.x - from.x), sign(to.y - from.y))
+			if !is_free(point):
+				return false
+		return true
+	else:
+		var space_state = get_world_2d().direct_space_state
+		var from_point := Vector2(from.x, from.y) * TILE_SIZE + Vector2(TILE_SIZE/2, TILE_SIZE/2)
+		var to_point := Vector2(to.x, to.y) * TILE_SIZE + Vector2(TILE_SIZE/2, TILE_SIZE/2)
+		var occlusion := space_state.intersect_ray(from_point, to_point) as Dictionary
+		return !occlusion
 	
 	#var steps_num := max(abs(to.x - from.x), abs(to.y - from.y))
 	#for i in range(steps_num):
@@ -336,6 +343,21 @@ func _build_pathfinding_graph():
 	for x in range(size.x):
 		for y in range(1, size.y):
 			var id1 = _id_array[x][y - 1]
+			var id2 = _id_array[x][y]
+			if id1 != 0 and id2 != 0:
+				_pathfinding_graph.connect_points(id1, id2)
+	
+	# Diagonal connections
+	for x in range(1, size.x):
+		for y in range(1, size.y):
+			var id1 = _id_array[x - 1][y - 1]
+			var id2 = _id_array[x][y]
+			if id1 != 0 and id2 != 0:
+				_pathfinding_graph.connect_points(id1, id2)
+	
+	for x in range(1, size.x):
+		for y in range(size.y - 1):
+			var id1 = _id_array[x - 1][y + 1]
 			var id2 = _id_array[x][y]
 			if id1 != 0 and id2 != 0:
 				_pathfinding_graph.connect_points(id1, id2)
