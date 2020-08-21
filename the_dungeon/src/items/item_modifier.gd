@@ -1,11 +1,9 @@
 extends Resource
 class_name ItemModifierRes
 
-
+export(Enum.EquipmentModifierType) var type : int
+export var value : int
 export var prefix_name : String
 export var postfix_name : String
-export var value : int
-export var damage : String
-export var armor : int
-export var speed : int
-export var max_health : int
+export var cost : int
+

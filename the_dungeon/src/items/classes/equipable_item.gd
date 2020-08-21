@@ -7,10 +7,6 @@ var rarity : int
 var ancient : bool
 var modifiers := []
 
-var damage : String setget ,_get_damage
-var armor : int setget ,_get_armor
-var speed : int setget ,_get_speed
-
 
 func initialize(resource : Resource) -> void:
 	var res := resource as EquipableItemRes
@@ -19,43 +15,21 @@ func initialize(resource : Resource) -> void:
 	texture = res.texture
 
 
+func sum_modifiers_by_type(type : int) -> int:
+	var result = 0
+	for m in modifiers:
+		var mod = m as ItemModifierRes
+		if mod.type == type:
+			result += mod.value
+	return result
+
+
 func _get_slot() -> int:
 	return slot
 
 
 func _get_texture() -> Texture:
 	return texture
-
-
-func _get_damage() -> String:
-	var result := ""
-	for m in modifiers:
-		var mod := m as ItemModifierRes
-		if mod.damage != "":
-			result += "+" + mod.damage
-	if ancient:
-		result = result + result
-	return result
-
-
-func _get_armor() -> int:
-	var result := 0
-	for m in modifiers:
-		var mod := m as ItemModifierRes
-		result += mod.armor
-	if ancient:
-		result = result + result
-	return result
-
-
-func _get_speed() -> int:
-	var result := 0
-	for m in modifiers:
-		var mod := m as ItemModifierRes
-		result += mod.speed
-	if ancient:
-		result = result + result
-	return result
 
 
 func _get_full_name() -> String:
@@ -70,3 +44,4 @@ func _get_full_name() -> String:
 		result = "ancient " + result
 	
 	return result
+

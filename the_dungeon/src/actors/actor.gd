@@ -4,8 +4,8 @@ class_name Actor
 
 signal action_idle(actor, action_cost)
 signal action_move(actor, action_cost, target_pos)
-signal action_attack(actor, action_cost, target_actor, damage)
-signal action_shoot(actor, action_cost, target_actor, damage, projectile_scene)
+signal action_attack(actor, action_cost, target_actor)
+signal action_shoot(actor, action_cost, target_actor, projectile_scene)
 
 signal death(actor)
 signal stats_changed(actor)
@@ -19,6 +19,7 @@ const IDLE_COST = 1
 
 
 export var starting_stats : Resource
+var fist_weapon_res := preload("res://assets/items/utils/fist.tres") as WeaponItemRes
 
 
 var damage_popup = load("res://src/utils/damage_popup.tscn")
@@ -29,7 +30,9 @@ var pos : Vector2 setget _set_pos
 var dead : bool setget , _is_dead
 var health : int setget _set_health, _get_health
 var max_health : int setget , _get_max_health
-var damage : String setget , _get_damage
+var min_damage : int setget , _get_min_damage
+var max_damage : int setget , _get_max_damage
+var attack_cost : int setget , _get_attack_cost
 var armor : int setget , _get_armor
 var speed : int setget , _get_speed
 
@@ -38,8 +41,7 @@ var _map : Map
 var _actor_list : ActorList
 var _equipped_items := {}
 var _items := []
-var _weapon : WeaponItem
-var _no_weapon : WeaponItem
+
 
 
 onready var _stats := $Stats as ActorStats
@@ -51,9 +53,6 @@ func initialize(map : Map, actor_list : ActorList) -> void:
 	_stats.initialize(starting_stats)
 	_map = map
 	_actor_list = actor_list
-	
-	_no_weapon = ItemDB.generate_fist_weapon()
-	_weapon = _no_weapon
 	
 	health = _get_max_health()
 
@@ -95,8 +94,6 @@ func equip_item(item : EquipableItem) -> bool:
 		if _equipped_items.has(Enum.EquipmentSlot.TWO_HANDS):
 			return false
 	_equipped_items[item.slot] = item
-	if item.slot == Enum.EquipmentSlot.MAIN_HAND:
-		_weapon = item as WeaponItem
 	_appearance.set_item_in_slot(item, item.slot)
 	item.connect("taken", self, "unequip_item")
 	emit_signal("stats_changed", self)
@@ -104,15 +101,17 @@ func equip_item(item : EquipableItem) -> bool:
 
 
 func unequip_item(item : EquipableItem) -> bool:
-	if !_equipped_items.has(item):
+	if !_equipped_items.values().has(item):
 		return false
 	_equipped_items.erase(item.slot)
-	if item == _weapon:
-		_weapon = _no_weapon
 	_appearance.free_slot(item.slot)
 	item.disconnect("taken", self, "unequip_item")
 	emit_signal("stats_changed", self)
 	return true
+
+
+func _is_ranged() -> bool:
+	return _equipped_items.has(Enum.EquipmentSlot.TWO_HANDS) and _equipped_items[Enum.EquipmentSlot.TWO_HANDS] is RangedWeaponItem
 
 
 func _set_pos(new_pos : Vector2) -> void:
@@ -146,30 +145,65 @@ func _get_health() -> int:
 
 func _get_max_health() -> int:
 	var result := _stats.max_health
-	#for i in _equipped_items.values():
-	#	var item := i as Item
-	#	result += item.max_health
 	if result < 0:
 		result = 0
 	return result
 
 
-func _get_damage() -> String:
-	var result := _stats.damage
-	for i in _equipped_items.values():
-		var item := i as EquipableItem
-		if item.damage != "":
-			result += "+" + item.damage
-	if result == "":
-		result = "1"
+func _get_min_damage() -> int:
+	var result := 0
+	if _equipped_items.has(Enum.EquipmentSlot.MAIN_HAND):
+		var weapon := _equipped_items[Enum.EquipmentSlot.MAIN_HAND] as WeaponItem
+		result += weapon.min_damage
+	if _equipped_items.has(Enum.EquipmentSlot.TWO_HANDS):
+		var weapon := _equipped_items[Enum.EquipmentSlot.TWO_HANDS] as WeaponItem
+		result += weapon.min_damage
+	if _equipped_items.has(Enum.EquipmentSlot.OFF_HAND) and _equipped_items[Enum.EquipmentSlot.OFF_HAND] is WeaponItem:
+		var weapon := _equipped_items[Enum.EquipmentSlot.OFF_HAND] as WeaponItem
+		result += weapon.min_damage
+	if result == 0:
+		result = fist_weapon_res.min_damage
+	return result
+
+
+func _get_max_damage() -> int:
+	var result := 0
+	if _equipped_items.has(Enum.EquipmentSlot.MAIN_HAND):
+		var weapon := _equipped_items[Enum.EquipmentSlot.MAIN_HAND] as WeaponItem
+		result += weapon.max_damage
+	if _equipped_items.has(Enum.EquipmentSlot.TWO_HANDS):
+		var weapon := _equipped_items[Enum.EquipmentSlot.TWO_HANDS] as WeaponItem
+		result += weapon.max_damage
+	if _equipped_items.has(Enum.EquipmentSlot.OFF_HAND) and _equipped_items[Enum.EquipmentSlot.OFF_HAND] is WeaponItem:
+		var weapon := _equipped_items[Enum.EquipmentSlot.OFF_HAND] as WeaponItem
+		result += weapon.max_damage
+	if result == 0:
+		result = fist_weapon_res.max_damage
+	return result
+
+
+func _get_attack_cost() -> int:
+	var result := 0
+	if _equipped_items.has(Enum.EquipmentSlot.MAIN_HAND):
+		var weapon := _equipped_items[Enum.EquipmentSlot.MAIN_HAND] as WeaponItem
+		result += weapon.attack_cost
+	if _equipped_items.has(Enum.EquipmentSlot.TWO_HANDS):
+		var weapon := _equipped_items[Enum.EquipmentSlot.TWO_HANDS] as WeaponItem
+		result += weapon.attack_cost
+	if _equipped_items.has(Enum.EquipmentSlot.OFF_HAND) and _equipped_items[Enum.EquipmentSlot.OFF_HAND] is WeaponItem:
+		var weapon := _equipped_items[Enum.EquipmentSlot.OFF_HAND] as WeaponItem
+		result += weapon.attack_cost
+	if result == 0:
+		result = fist_weapon_res.attack_cost
 	return result
 
 
 func _get_armor() -> int:
 	var result := _stats.armor
 	for i in _equipped_items.values():
-		var item := i as EquipableItem
-		result += item.armor
+		if i is ArmorItem:
+			var item := i as ArmorItem
+			result += item.armor
 	if result < 0:
 		result = 0
 	return result
@@ -177,9 +211,4 @@ func _get_armor() -> int:
 
 func _get_speed() -> int:
 	var result := _stats.speed
-	for i in _equipped_items.values():
-		var item := i as EquipableItem
-		result += item.speed
-	if result < 1:
-		result = 1
 	return result

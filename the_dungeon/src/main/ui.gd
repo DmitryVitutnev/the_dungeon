@@ -32,7 +32,7 @@ func set_level(value : int) -> void:
 
 func _player_stats_changed(player : Actor):
 	_set_health(player.health)
-	_set_damage(player.damage)
+	_set_damage(player.min_damage, player.max_damage)
 	_set_armor(player.armor)
 	_set_speed(player.speed)
 
@@ -54,8 +54,8 @@ func _set_health(value : int) -> void:
 	_health.text = "Health: " + String(value)
 
 
-func _set_damage(value : String) -> void:
-	_damage.text = "Damage: " + Roll.from_d_to_interval(value)
+func _set_damage(min_value : int, max_value : int) -> void:
+	_damage.text = "Damage: " + str(min_value) + "-" + str(max_value)
 
 
 func _set_armor(value : int) -> void:

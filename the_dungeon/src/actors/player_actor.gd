@@ -12,17 +12,16 @@ func _process(delta):
 		var actor := _actor_list.get_alive_actor_by_pos(_movement_queue[0]) as Actor
 		if actor != null:
 			_movement_queue.clear()
-			emit_signal("action_attack", self, _weapon.attack_cost, actor, _get_damage())
+			emit_signal("action_attack", self, _get_attack_cost(), actor)
 		else:
-			if _weapon is RangedWeaponItem:
-				var ranged = _weapon as RangedWeaponItem
+			if _is_ranged():
+				var ranged = _equipped_items[Enum.EquipmentSlot.TWO_HANDS] as RangedWeaponItem
 				for i in range(_movement_queue.size() - 1, 0, -1):
 					var target_actor = _actor_list.get_alive_actor_by_pos(_movement_queue[i])
 					if target_actor != null and _map.line_is_free(pos, _movement_queue[i]):
 						_movement_queue.clear()
-						emit_signal("action_shoot", self, ranged.attack_cost, target_actor, _get_damage(), ranged.projectile_scene)
+						emit_signal("action_shoot", self, ranged.attack_cost, target_actor, ranged.projectile_scene)
 						return
-			
 			var target_pos = _movement_queue[0]
 			_movement_queue.remove(0)
 			emit_signal("action_move", self, MOVEMENT_COST, target_pos)
@@ -53,7 +52,7 @@ func handle_input(event : InputEvent) -> void:
 			if actor == null:
 				emit_signal("action_move", self, MOVEMENT_COST, target_pos)
 			else:
-				emit_signal("action_attack", self, _weapon.attack_cost, actor, _get_damage())
+				emit_signal("action_attack", self, _get_attack_cost(), actor)
 			return
 	
 	if (event is InputEventMouseButton or event is InputEventScreenTouch) and event.pressed:

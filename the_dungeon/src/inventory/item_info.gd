@@ -30,15 +30,12 @@ func _update_text() -> void:
 			name_text.bbcode_text = "[color=green]" + name_text.bbcode_text + "[/color]"
 	
 	var new_text := ""
-	new_text += "slot : " + str(_item.slot) + "\n"
-	if _item.damage != "":
-		new_text += "damage : " + Roll.from_d_to_interval(_item.damage) + "\n"
+	new_text += "slot : " + str(Enum.EquipmentSlot.keys()[_item.slot]) + "\n"
 	if _item is WeaponItem:
 		var weapon = _item as WeaponItem
+		new_text += "damage : " + str(weapon.min_damage) + "-" + str(weapon.max_damage) + "\n"
 		new_text += "attack cost : " + str(weapon.attack_cost) + "\n"
-	if _item.armor != 0:
+	if _item is ArmorItem:
 		new_text += "armor : " + str(_item.armor) + "\n"
-	if _item.speed != 0:
-		new_text += "speed : " + str(_item.speed) + "\n"
 		
 	stats_text.text = new_text

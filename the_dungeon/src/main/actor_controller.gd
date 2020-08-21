@@ -86,7 +86,8 @@ func _actor_move(actor : Actor, action_cost : int, target_pos : Vector2) -> void
 	_next_turn(action_cost)
 
 
-func _actor_attack(actor : Actor, action_cost : int, target_actor : Actor, damage : String) -> void:
+func _actor_attack(actor : Actor, action_cost : int, target_actor : Actor) -> void:
+	var damage = actor.min_damage + randi() % (actor.max_damage - actor.min_damage + 1)
 	var forward_duration := 0.05
 	var back_duration := 0.2
 	var tween = Tween.new()
@@ -94,7 +95,7 @@ func _actor_attack(actor : Actor, action_cost : int, target_actor : Actor, damag
 	tween.interpolate_property(actor, "position",
 		actor.pos * _map.TILE_SIZE, target_actor.pos * _map.TILE_SIZE, forward_duration,
 		Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-	tween.interpolate_callback(target_actor, forward_duration, "take_damage", max(0, Roll.from_string(damage) - target_actor.armor))
+	tween.interpolate_callback(target_actor, forward_duration, "take_damage", max(0, damage - target_actor.armor))
 	tween.interpolate_property(actor, "position",
 		target_actor.pos * _map.TILE_SIZE, actor.pos * _map.TILE_SIZE, back_duration,
 		Tween.TRANS_LINEAR, Tween.EASE_IN_OUT, forward_duration)
@@ -103,7 +104,8 @@ func _actor_attack(actor : Actor, action_cost : int, target_actor : Actor, damag
 	tween.start()
 
 
-func _actor_shoot(actor : Actor, action_cost : int, target_actor : Actor, damage : String, projectile_prefab : PackedScene) -> void:
+func _actor_shoot(actor : Actor, action_cost : int, target_actor : Actor, projectile_prefab : PackedScene) -> void:
+	var damage = actor.min_damage + randi() % (actor.max_damage - actor.min_damage + 1)
 	var target_point = Vector2(rand_range(-4, 4), rand_range(-4, 4))
 	var start_point = (actor.pos - target_actor.pos) * _map.TILE_SIZE + Vector2(rand_range(-4, 4), rand_range(-4, 4))
 	var flight_duration = (target_point - start_point).length() * 0.001
@@ -116,7 +118,7 @@ func _actor_shoot(actor : Actor, action_cost : int, target_actor : Actor, damage
 		start_point, target_point, flight_duration,
 		Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	tween.interpolate_callback(target_actor, flight_duration, "take_damage", 
-	max(0, Roll.from_string(damage) - target_actor.armor))
+	max(0, damage - target_actor.armor))
 	tween.interpolate_callback(self, flight_duration, "_next_turn", action_cost)
 	tween.interpolate_callback(tween, flight_duration, "queue_free")
 	tween.start()

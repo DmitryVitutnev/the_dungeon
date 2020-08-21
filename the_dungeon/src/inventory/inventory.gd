@@ -85,8 +85,6 @@ func _grab(cursor_pos) -> void:
 	if c != null and c.has_method("grab_item"):
 		_item_held = c.grab_item(cursor_pos)
 		if _item_held != null:
-			if c == eq_slots:
-				_owner.unequip_item(_item_held.item_info)
 			_item_can_be_returned = true
 			_last_container = c
 			_last_pos = _item_held.rect_global_position
