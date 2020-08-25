@@ -35,10 +35,7 @@ func _get_texture() -> Texture:
 func _get_full_name() -> String:
 	var result := full_name
 	if modifiers.size() >= 1:
-		result = modifiers[0].prefix_name + " " + result
-	
-	if modifiers.size() >= 2:
-		result = result + " " + modifiers[1].postfix_name
+		result = modifiers[0].name + " " + result
 	
 	if ancient:
 		result = "ancient " + result

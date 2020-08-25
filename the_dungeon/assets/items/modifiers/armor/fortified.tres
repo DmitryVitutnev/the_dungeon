@@ -1,0 +1,11 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://src/items/item_modifier.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+type = 2
+attribute = 1
+value = 1
+name = "fortified"
+cost = 1

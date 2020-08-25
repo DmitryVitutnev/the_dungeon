@@ -15,22 +15,28 @@ flip_h = true
 script = ExtResource( 3 )
 slot = 1
 
+[node name="TWO_HANDS" type="Sprite" parent="Slots"]
+position = Vector2( -13, -4 )
+flip_h = true
+script = ExtResource( 3 )
+slot = 3
+
 [node name="SKIN" type="Sprite" parent="Slots"]
 texture = ExtResource( 2 )
 
 [node name="BODY" type="Sprite" parent="Slots"]
 script = ExtResource( 3 )
-slot = 4
+slot = 5
 
 [node name="HEAD" type="Sprite" parent="Slots"]
 position = Vector2( 0, -12 )
 script = ExtResource( 3 )
-slot = 3
+slot = 4
 
 [node name="LEGS" type="Sprite" parent="Slots"]
 position = Vector2( 0, 12 )
 script = ExtResource( 3 )
-slot = 5
+slot = 6
 
 [node name="OFF_HAND" type="Sprite" parent="Slots"]
 position = Vector2( 13, -4 )

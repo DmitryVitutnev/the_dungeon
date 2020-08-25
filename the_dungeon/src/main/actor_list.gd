@@ -47,6 +47,16 @@ func get_all() -> Array:
 	return [player] + _enemies
 
 
+func get_all_alive() -> Array:
+	var result := []
+	if player.health > 0:
+		result.append(player)
+	for i in range(_enemies.size()):
+		if _enemies[i].health > 0:
+			result.append(_enemies[i])
+	return result
+
+
 func clear_enemies() -> void:
 	var enemies_to_remove := [] + _enemies
 	for enemy in enemies_to_remove:

@@ -12,4 +12,4 @@ func initialize(resource : Resource) -> void:
 
 
 func _get_armor() -> int:
-	return armor + sum_modifiers_by_type(Enum.EquipmentModifierType.ARMOR)
+	return armor + sum_modifiers_by_type(Enum.EquipmentModifierAttribute.ARMOR)

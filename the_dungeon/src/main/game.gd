@@ -1,18 +1,6 @@
 extends Node2D
 
 
-const LEVEL_SIZES := [
-	Vector2(30, 30),
-	Vector2(35, 35),
-	Vector2(40, 40),
-	Vector2(45, 45),
-	Vector2(50, 50),
-	Vector2(30, 30)
-]
-const LEVEL_ROOM_COUNTS := [5, 7, 9, 12, 15, 2]
-const LEVEL_ENEMY_COUNTS := [7, 12, 16, 21, 28, 0]
-
-
 var _current_level := 0
 var _player_scene := load("res://assets/player.tscn") as PackedScene
 var _enemy_scene := load("res://assets/enemy.tscn") as PackedScene
@@ -54,15 +42,15 @@ func _next_level() -> void:
 	_current_level += 1
 	_ui.set_level(_current_level + 1)
 	
-	if _current_level >= LEVEL_SIZES.size():
+	if _current_level >= Consts.LEVEL_SIZES.size():
 		_win()
 		return
 	
-	_build_level(LEVEL_SIZES[_current_level], LEVEL_ROOM_COUNTS[_current_level])
+	_build_level(Consts.LEVEL_SIZES[_current_level], Consts.LEVEL_ROOM_COUNTS[_current_level])
 	_place_player(_player)
-	_spawn_enemies(LEVEL_ENEMY_COUNTS[_current_level])
+	_spawn_enemies(Consts.LEVEL_ENEMY_COUNTS[_current_level])
 	_spawn_items()
-	if _current_level == LEVEL_SIZES.size() - 1:
+	if _current_level == Consts.LEVEL_SIZES.size() - 1:
 		_boss_alive = true
 		_spawn_boss()
 	
@@ -101,11 +89,11 @@ func _spawn_enemies(enemy_number : int) -> void:
 		_actor_controller.add_enemy(enemy)
 		enemy.connect("item_picked_up", _loot_map, "remove_item")
 		enemy.connect("item_dropped", _loot_map, "add_item")
-		var weapon := ItemDB.generate_weapon()
+		var weapon := ItemDB.generate_weapon(_current_level)
 		enemy.pickup_item(weapon)
 		enemy.equip_item(weapon)
 		for j in range(_current_level):
-			var item := ItemDB.generate_armor()
+			var item := ItemDB.generate_armor(_current_level)
 			if !enemy._equipped_items.has(item.slot):
 				enemy.pickup_item(item)
 				enemy.equip_item(item)

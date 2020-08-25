@@ -1,0 +1,15 @@
+[gd_resource type="Resource" load_steps=3 format=2]
+
+[ext_resource path="res://src/items/resources/melee_weapon_item_res.gd" type="Script" id=1]
+[ext_resource path="res://assets/items/weapons/melee/swords/03_blue_steel_sword/blue_steel_sword_texture.png" type="Texture" id=2]
+
+[resource]
+script = ExtResource( 1 )
+name = "blue steel sword"
+cost = 3
+icon = ExtResource( 2 )
+slot = 1
+texture = ExtResource( 2 )
+min_damage = 14
+max_damage = 18
+attack_cost = 10

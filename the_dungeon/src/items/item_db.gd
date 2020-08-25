@@ -1,8 +1,14 @@
 extends Node
 
 const STATS_PATH := "res://assets/items/stats/"
-const MODIFIERS_PATH := "res://assets/items/modifiers/"
 const UNIQUE_STATS_PATH := "res://assets/items/unique_stats/"
+
+const WEAPON_FOLDER_PATH := "res://assets/items/weapons/"
+const ARMOR_FOLDER_PATH := "res://assets/items/armor/"
+
+const WEAPON_MODIFIERS_PATH := "res://assets/items/modifiers/weapon/"
+const ARMOR_MODIFIERS_PATH := "res://assets/items/modifiers/armor/"
+
 
 enum Type {
 	MELEE, RANGED
@@ -28,55 +34,48 @@ var fist_weapon_stats := load("res://assets/items/utils/fist.tres")
 var _stats := []
 var _weapon_stats := []
 var _armor_stats := []
-var _modifiers := []
+var _weapon_modifiers := []
+var _armor_modifiers := []
 var _items := []
 var _unique_item_stats := []
 
 
 func _ready() -> void:
-	var dir = Directory.new()
-	dir.open(STATS_PATH)
-	dir.list_dir_begin()
-	var file_name = dir.get_next()
-	while file_name != "":
-		if !file_name.begins_with(".") and !dir.current_is_dir():
-			var stats = load(STATS_PATH + file_name)
-			_stats.append(stats)
-			if stats.slot == Enum.EquipmentSlot.MAIN_HAND or stats.slot == Enum.EquipmentSlot.TWO_HANDS:
-				_weapon_stats.append(stats)
-			else:
-				_armor_stats.append(stats)
-		file_name = dir.get_next()
 	
-	dir.open(MODIFIERS_PATH)
-	dir.list_dir_begin()
-	file_name = dir.get_next()
-	while file_name != "":
-		if !file_name.begins_with("."):
-			var mod = load(MODIFIERS_PATH + file_name)
-			_modifiers.append(mod)
-		file_name = dir.get_next()
+	_weapon_stats = _search_path_for_stats(WEAPON_FOLDER_PATH)
 	
-	dir.open(UNIQUE_STATS_PATH)
-	dir.list_dir_begin()
-	file_name = dir.get_next()
-	while file_name != "":
-		if !file_name.begins_with("."):
-			var unique_stats = load(UNIQUE_STATS_PATH + file_name)
-			_unique_item_stats.append(unique_stats)
-		file_name = dir.get_next()
+	_armor_stats = _search_path_for_stats(ARMOR_FOLDER_PATH)
+	
+	_weapon_modifiers = _search_path_for_stats(WEAPON_MODIFIERS_PATH)
+	
+	_armor_modifiers = _search_path_for_stats(ARMOR_MODIFIERS_PATH)
+	
+	_unique_item_stats = _search_path_for_stats(UNIQUE_STATS_PATH)
 
 
 func generate_item() -> EquipableItem:
 	return _generate_item_from_list(_stats)
 
 
-func generate_weapon() -> EquipableItem:
-	return _generate_item_from_list(_weapon_stats)
+func generate_weapon(level : int) -> WeaponItem:
+	var list := []
+	for w in _weapon_stats:
+		var weapon := w as WeaponItemRes
+		if weapon.cost <= Consts.MAX_LOOT_COST_ON_LEVEL[level]:
+			list.append(weapon)
+	var item := _generate_item_from_list(list) as WeaponItem
+	if randf() < Consts.FIRST_MODIFIER_CHANCE_ON_LEVEL[level]:
+		item.modifiers.append(_weapon_modifiers[randi() % _weapon_modifiers.size()])
+		item.rarity = Rarity.YELLOW
+	return item
 
 
-func generate_armor() -> EquipableItem:
-	return _generate_item_from_list(_armor_stats)
+func generate_armor(level : int) -> ArmorItem:
+	var item = _generate_item_from_list(_armor_stats) as ArmorItem
+	if randf() < Consts.FIRST_MODIFIER_CHANCE_ON_LEVEL[level]:
+		item.modifiers.append(_armor_modifiers[randi() % _armor_modifiers.size()])
+		item.rarity = Rarity.YELLOW
+	return item
 
 
 func generate_starting_weapon() -> MeleeWeaponItem:
@@ -114,7 +113,6 @@ func generate_boss_equipment() -> Array:
 
 
 func _generate_item_from_list(list : Array) -> EquipableItem:
-	return generate_starting_weapon()
 	var stats = list[randi() % list.size()]
 	var item : EquipableItem
 	if stats is MeleeWeaponItemRes:
@@ -125,15 +123,30 @@ func _generate_item_from_list(list : Array) -> EquipableItem:
 		item = ArmorItem.new()
 	item.initialize(stats)
 	item.rarity = Rarity.WHITE
-	if Roll.d3(1) == 3:
-		item.modifiers.append(_modifiers[randi() % _modifiers.size()])
-		item.rarity = Rarity.BLUE
-		if Roll.d3(1) == 3:
-			item.modifiers.append(_modifiers[randi() % _modifiers.size()])
-			item.rarity = Rarity.YELLOW
-			if Roll.d3(1) == 3:
-				item.ancient = true
-				item.rarity = Rarity.RED
 	add_child(item)
 	_items.append(item)
 	return item
+
+
+func _search_path_for_stats(path : String) -> Array:
+	var result := []
+	var dir := Directory.new()
+	if dir.open(path) == OK:
+		dir.list_dir_begin()
+		var file_name := dir.get_next() as String
+		while file_name != "":
+			if file_name == "." or file_name == "..":
+				pass
+			elif dir.current_is_dir():
+				result = result + _search_path_for_stats(path + file_name + "/")
+				#print("Found directory: " + file_name)
+			else:
+				if file_name.find("tres") != -1:
+					result.append(load(path + file_name))
+					print("Added stats: " + file_name)
+				#print("Found file: " + file_name)
+			file_name = dir.get_next()
+	else:
+		print("An error occurred when trying to access the path " + path)
+	return result
+

@@ -106,7 +106,7 @@ func _actor_attack(actor : Actor, action_cost : int, target_actor : Actor) -> vo
 
 func _actor_shoot(actor : Actor, action_cost : int, target_actor : Actor, projectile_prefab : PackedScene) -> void:
 	var damage = actor.min_damage + randi() % (actor.max_damage - actor.min_damage + 1)
-	var target_point = Vector2(rand_range(-4, 4), rand_range(-4, 4))
+	var target_point = (actor.pos - target_actor.pos).normalized().rotated(randf() * PI / 2 - PI / 4) * (3 * randf() + 1)
 	var start_point = (actor.pos - target_actor.pos) * _map.TILE_SIZE + Vector2(rand_range(-4, 4), rand_range(-4, 4))
 	var flight_duration = (target_point - start_point).length() * 0.001
 	var projectile = projectile_prefab.instance()

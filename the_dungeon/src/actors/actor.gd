@@ -76,7 +76,7 @@ func take_damage(damage : int) -> void:
 func pickup_item(item : Item) -> void:
 	_items.append(item)
 	emit_signal("item_picked_up", item)
-	item.emit_signal("taken")
+	item.emit_signal("taken", item)
 
 
 func drop_item(item : Item) -> void:
@@ -95,6 +95,7 @@ func equip_item(item : EquipableItem) -> bool:
 			return false
 	_equipped_items[item.slot] = item
 	_appearance.set_item_in_slot(item, item.slot)
+	print(item.slot)
 	item.connect("taken", self, "unequip_item")
 	emit_signal("stats_changed", self)
 	return true

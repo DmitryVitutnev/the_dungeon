@@ -1,0 +1,15 @@
+[gd_resource type="Resource" load_steps=3 format=2]
+
+[ext_resource path="res://src/items/resources/ranged_weapon_item_res.gd" type="Script" id=1]
+[ext_resource path="res://assets/items/weapons/ranged/bows/03_red_wood_bow/red_wood_bow_texture.png" type="Texture" id=2]
+
+[resource]
+script = ExtResource( 1 )
+name = "red wood bow"
+cost = 3
+icon = ExtResource( 2 )
+slot = 3
+texture = ExtResource( 2 )
+min_damage = 10
+max_damage = 14
+attack_cost = 15

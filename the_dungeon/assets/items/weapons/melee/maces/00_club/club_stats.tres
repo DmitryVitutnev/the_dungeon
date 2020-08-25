@@ -1,0 +1,15 @@
+[gd_resource type="Resource" load_steps=3 format=2]
+
+[ext_resource path="res://src/items/resources/melee_weapon_item_res.gd" type="Script" id=1]
+[ext_resource path="res://assets/items/weapons/melee/maces/00_club/club_texture.png" type="Texture" id=2]
+
+[resource]
+script = ExtResource( 1 )
+name = "club"
+cost = 0
+icon = ExtResource( 2 )
+slot = 1
+texture = ExtResource( 2 )
+min_damage = 9
+max_damage = 12
+attack_cost = 14

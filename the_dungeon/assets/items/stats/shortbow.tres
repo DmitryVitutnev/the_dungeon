@@ -3,7 +3,9 @@
 [ext_resource path="res://src/items/resources/ranged_weapon_item_res.gd" type="Script" id=1]
 [ext_resource path="res://assets/items/icons/shortbow_icon.png" type="Texture" id=2]
 [ext_resource path="res://assets/items/textures/shortbow.png" type="Texture" id=3]
-[ext_resource path="res://assets/items/projectiles/arrow_projectile.tscn" type="PackedScene" id=4]
+[ext_resource path="res://assets/items/utils/basic_projectile.tscn" type="PackedScene" id=4]
+
+
 
 [resource]
 script = ExtResource( 1 )

@@ -24,6 +24,12 @@ func _process(delta):
 						return
 			var target_pos = _movement_queue[0]
 			_movement_queue.remove(0)
+			
+			for a in _actor_list.get_all_alive():
+				if _map.line_is_free(a.pos, pos) and a != self:
+					_movement_queue.clear()
+					break
+			
 			emit_signal("action_move", self, MOVEMENT_COST, target_pos)
 
 
@@ -58,13 +64,6 @@ func handle_input(event : InputEvent) -> void:
 	if (event is InputEventMouseButton or event is InputEventScreenTouch) and event.pressed:
 		var click_pos := _map.coord_to_pos(get_global_mouse_position())
 		
-		#var target_actor := _actor_list.get_alive_actor_by_pos(click_pos) as Actor
-		#if target_actor != null and target_actor != self and _map.line_is_free(pos, target_actor.pos):
-		#	if _weapon is RangedWeaponItem:
-		#		var ranged := _weapon as RangedWeaponItem
-		#		var projectile_scene = ranged.projectile_scene
-		#		emit_signal("action_shoot", self, _weapon.attack_cost, target_actor, _get_damage(), projectile_scene)
-		#		return
 		var path := _map.find_path(pos, click_pos)
 		if path[path.size() - 1] == click_pos and path.size() > 1:
 			_movement_queue.clear()

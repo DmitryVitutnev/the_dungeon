@@ -16,12 +16,12 @@ func initialize(resource : Resource) -> void:
 
 
 func _get_min_damage() -> int:
-	return min_damage + sum_modifiers_by_type(Enum.EquipmentModifierType.DAMAGE)
+	return min_damage + sum_modifiers_by_type(Enum.EquipmentModifierAttribute.DAMAGE)
 
 
 func _get_max_damage() -> int:
-	return max_damage + sum_modifiers_by_type(Enum.EquipmentModifierType.DAMAGE)
+	return max_damage + sum_modifiers_by_type(Enum.EquipmentModifierAttribute.DAMAGE)
 
 
 func _get_attack_cost() -> int:
-	return attack_cost + sum_modifiers_by_type(Enum.EquipmentModifierType.ATTACK_COST)
+	return attack_cost + sum_modifiers_by_type(Enum.EquipmentModifierAttribute.ATTACK_COST)
